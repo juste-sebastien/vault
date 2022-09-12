@@ -1,0 +1,4 @@
+Libraries used:
+    - zipfile
+    - pyminizip
+    - getpass

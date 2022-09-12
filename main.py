@@ -45,6 +45,7 @@ def get_choice(vault):
     """
     Extract csv from zip archive corresponding to vault
     Prompt user to make a choice for using vault
+    User could choose between consult, add, generate, usage and quit
 
     Parameters:
     -----------------
@@ -68,7 +69,6 @@ def get_choice(vault):
             elif not choice.isalpha():
                 raise TypeError
         except KeyboardInterrupt:
-            # execute save()
             print("\nThank's for using Vault!")
             break
         except TypeError:
