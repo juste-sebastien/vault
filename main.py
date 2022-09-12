@@ -1,6 +1,5 @@
 import os
 import csv
-from pickletools import read_int4
 import random
 
 import zipfile
@@ -25,12 +24,9 @@ def main():
 def get_welcome():
     """
     print usage of the app and create a vault object. if the vault exist, user choose
-    an action for his vault. even we create a new vault 
+    an action for his vault. even we create a new vault
     """
-    print(
-        "Welcome in Vault App.\n" + 
-        f"{USAGE}\n" 
-    )
+    print("Welcome in Vault App.\n" + f"{USAGE}\n")
     vault = vlt.Vault.get()
     if check_existance(vault.archive, vault.file, "r", vault.password.encode()):
         get_choice(vault)
@@ -78,8 +74,10 @@ def get_choice(vault):
                     file = add(file, mode)
                 case "generate":
                     print(f"Amazing, let me create a new PWD for you")
-                    try: 
-                        pwd_length = int(input("Which length do you want for your Password? "))
+                    try:
+                        pwd_length = int(
+                            input("Which length do you want for your Password? ")
+                        )
                     except ValueError:
                         print("You need to type an integer\n")
                         get_choice(vault)
@@ -170,7 +168,9 @@ def add_with_login(file, mode):
             url = input("Url: ")
         except:
             url = None
-        writer.writerow({"account": account, "login": login, "password": pwd, "url": url})
+        writer.writerow(
+            {"account": account, "login": login, "password": pwd, "url": url}
+        )
     return file
 
 
