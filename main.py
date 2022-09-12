@@ -1,17 +1,12 @@
-import sys
 import os
-import base64
+import csv
+from pickletools import read_int4
+import random
 
 import zipfile
-import getpass
-
 import pyminizip
 
-from cryptography.fernet import Fernet
-
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-
+import class_vault as vlt
 
 USAGE = str(
     "\n"
@@ -19,22 +14,40 @@ USAGE = str(
     + "generate -> for generating a new password\n"
     + "add -> for adding a new account(login + password) in to your vault\n"
     + "CTRL + D or CTRL + C or quit -> to save your vault and quit program\n"
+    + "usage -> when you don't know what to do"
 )
 
 
 def main():
-    # get_welcome()
-    get_choice()
+    get_welcome()
 
 
 def get_welcome():
-    """print usage of the app"""
+    """
+    print usage of the app and create a vault object. if the vault exist, user choose
+    an action for his vault. even we create a new vault 
+    """
+    print(
+        "Welcome in Vault App.\n" + 
+        f"{USAGE}\n" 
+    )
+    vault = vlt.Vault.get()
+    if check_existance(vault.archive, vault.file, "r", vault.password.encode()):
+        get_choice(vault)
+    else:
+        create(vault, "w")
+        get_choice(vault)
 
 
-def get_choice():
-    """prompt user to make a choice for using vault"""
+def get_choice(vault):
+    """
+    extract csv from zip archive corresponding to vault
+    prompt user to make a choice for using vault
+    """
     mode = "r"
-    archive, file, password = get_filename(mode)
+    file = vault.file
+    archive = vault.archive
+    password = vault.password
     path_file = "./" + file
     undo_zip(archive, password)
     while True:
@@ -57,16 +70,30 @@ def get_choice():
         else:
             match choice:
                 case "consult":
+                    print(f"\nGroovy we're gonna to consult your vault")
                     file = consult(file, path_file, mode)
                 case "add":
+                    print("\nLet's go for adding a new set in to your vault")
                     mode = "a"
-                    file = add(file, path_file, mode)
+                    file = add(file, mode)
                 case "generate":
-                    generate()
+                    print(f"Amazing, let me create a new PWD for you")
+                    try: 
+                        pwd_length = int(input("Which length do you want for your Password? "))
+                    except ValueError:
+                        print("You need to type an integer\n")
+                        get_choice(vault)
+                    except TypeError:
+                        print("You need to type an integer\n")
+                        get_choice(vault)
+                    else:
+                        print(generate(pwd_length) + "\n")
+
                 case "usage":
                     print(f"{USAGE}")
                 case _:
                     pass
+
     do_zip(archive, file, password)
     if os.path.exists(file):
         os.remove(file)
@@ -74,125 +101,68 @@ def get_choice():
 
 def consult(file, path_file, mode):
     """open personal vault decrypt it if password correspond to hashkey"""
-    print(f"\nGroovy we're gonna to consult your vault")
     try:
-        account, acnt_login, acnt_pwd, acnt_url= search(path_file, mode)
+        account, acnt_login, acnt_pwd, acnt_url = search(path_file, mode)
     except TypeError:
-        print("Sorry, the account does not exist yet in your vault")
-        want_add = input("Do you want to add a new account? (yes or no) ").lower().strip()
+        print("Sorry, the account does not exist yet in your Vault")
+        want_add = (
+            input("Do you want to add a new account in your Vault? (yes or no) ")
+            .lower()
+            .strip()
+        )
         if want_add == "yes":
             mode = "a"
             add_with_login(file, mode)
         else:
             consult(file, path_file, mode)
     else:
-        print(f"Your login for {account} is {acnt_login}\nthe password associated is {acnt_pwd}\n")
-            #personal_vault = encrypt_or_decrypt(password, file, "decrypt")
+        print(
+            f"Your login for {account} is {acnt_login}\nthe password associated is {acnt_pwd}\n"
+        )
+        # personal_vault = encrypt_or_decrypt(password, file, "decrypt")
     return file
 
-def add(file, path_file, mode):
-    print("\nLet's go for adding a new set in to your vault")
-    return add_with_login()
+
+def add(file, mode):
+    return add_with_login(file, mode)
 
 
-def generate():
-    print(f"Amazing, let me create a new pWD for you")
+def generate(length):
+    pwd_created = ""
+    for _ in range(length):
+        char = random.randint(32, 127)
+        pwd_created += chr(char)
+    return pwd_created
 
 
-def get_filename(mode):
-    """open the file relating to the user account"""
-    account = get_login()
-    pwd = get_password()
-    archive = account + ".zip"
-    file = account + ".csv"
-    count = 0
-    if check_existance(archive, file, mode):
-        return archive, file, pwd
-    elif count == 0:
-        #if not account create, programm purpose to create one
-        want_create = input("Do you want to create a new account? (yes or no) ").lower().strip()
-        if want_create == "yes":
-            with open(file, "w") as f:
-                f.write("account, login, password, url\r\n")
-            do_zip(archive, file, pwd)
-            count += 1
-            return archive, file, pwd
-        else:
-            get_filename(mode)
-
-
-def check_existance(archive, file, mode):
+def check_existance(archive, file, mode, pwd):
     """check if the file exist in the current folder"""
     try:
-       with zipfile.ZipFile(archive, mode) as a:
-            with a.open(file, mode) as f:
+        with zipfile.ZipFile(archive, mode) as a:
+            with a.open(file, mode, pwd) as f:
                 return True
     except FileNotFoundError as e:
-        print(
-            "Please be sure that you are in the right folder before running this script"
-        )
         return False
     except IOError as e:
-        print(
-            "Please be sure that you are in the right folder before running this script"
-        )
         return False
-
-
-def encrypt_or_decrypt(pwd, file, mode):
-    #todo
-    bytes_pwd = bytes(pwd, "utf-8")
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=b"",
-        iterations=390000,
-    )
-
-    key = base64.urlsafe_b64encode(kdf.derive(bytes_pwd))
-
-    f = Fernet(key)
-    token = f.encrypt(file)
-    if "encrypt" in mode:
-        return token.decode()
-    if "decrypt" in mode:
-        return f.decrypt(token).decode()
-
-
-def get_login():
-    return input("Login: ").lower().strip()
-
-
-def get_password():
-    return getpass.getpass(
-        "\nPlease enter password.\n"+
-        "Password: "
-    )
-
-
-def undo_zip(archive, pwd):
-    """uncompress the archive with the associated pwd"""
-    pyminizip.uncompress(archive, pwd, "./", 5)
-
-
-def do_zip(archive,file, pwd):
-    """compress the archive with the associated pwd"""
-    pyminizip.compress(file, None, archive, pwd, 5)
 
 
 def search(file, mode):
-    """ search the account, login, pwd and url in the csv file"""
+    """search the account, login, pwd and url in the csv file"""
     research = input("\nFor which account do you want get the password? ")
     research = research.lower().strip()
     with open(file, mode) as f:
-        for line in f:
-            if research in line:
-                account, login, pwd, url = line.split(", ", maxsplit=3)
-                return account, login, pwd, url
+        fieldnames = ["account", "login", "password", "url"]
+        reader = csv.DictReader(f, fieldnames=fieldnames, delimiter="|")
+        for row in reader:
+            if row["account"] == research:
+                return row["account"], row["login"], row["password"], row["url"]
 
 
 def add_with_login(file, mode):
     with open(file, mode) as f:
+        fieldnames = ["account", "login", "password", "url"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter="|")
         account = input("Account Name: ").lower().strip()
         login = input("Login: ").strip()
         pwd = input("Password: ").strip()
@@ -200,8 +170,24 @@ def add_with_login(file, mode):
             url = input("Url: ")
         except:
             url = None
-        f.write(f"{account}, {login}, {pwd}, {url}\r\n")
+        writer.writerow({"account": account, "login": login, "password": pwd, "url": url})
     return file
+
+
+def create(vault, mode):
+    with zipfile.ZipFile(vault.archive, mode) as a:
+        with a.open(vault.file, mode) as f:
+            pass
+
+
+def undo_zip(archive, pwd):
+    """uncompress the archive with the associated pwd"""
+    pyminizip.uncompress(archive, pwd, "./", 5)
+
+
+def do_zip(archive, file, pwd):
+    """compress the archive with the associated pwd"""
+    pyminizip.compress(file, None, archive, pwd, 5)
 
 
 if __name__ == "__main__":

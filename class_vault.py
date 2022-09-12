@@ -1,7 +1,4 @@
 import getpass
-import zipfile
-import pyminizip
-
 
 
 class Vault:
