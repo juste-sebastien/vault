@@ -23,22 +23,36 @@ def main():
 
 def get_welcome():
     """
-    print usage of the app and create a vault object. if the vault exist, user choose
-    an action for his vault. even we create a new vault
+    Print usage of the app and create a vault object. If the vault not exist,
+    a new vault is created by calling create(). Finally, get_choice() is called
+
+    Parameters:
+    -----------------
+        None
+
+    Returns:
+    -----------------
+        Call get_choice()
     """
     print("Welcome in Vault App.\n" + f"{USAGE}\n")
     vault = vlt.Vault.get()
-    if check_existance(vault.archive, vault.file, "r", vault.password.encode()):
-        get_choice(vault)
-    else:
+    if not check_existance(vault.archive, vault.file, "r", vault.password.encode()):
         create(vault, "w")
-        get_choice(vault)
+    return get_choice(vault)
 
 
 def get_choice(vault):
     """
-    extract csv from zip archive corresponding to vault
-    prompt user to make a choice for using vault
+    Extract csv from zip archive corresponding to vault
+    Prompt user to make a choice for using vault
+
+    Parameters:
+    -----------------
+        vault: Vault object from class_vault.py
+
+    Returns:
+    -----------------
+        None
     """
     mode = "r"
     file = vault.file
@@ -85,7 +99,7 @@ def get_choice(vault):
                         print("You need to type an integer\n")
                         get_choice(vault)
                     else:
-                        print(generate(pwd_length) + "\n")
+                        print(f"{generate(pwd_length)}\n")
 
                 case "usage":
                     print(f"{USAGE}")
@@ -96,9 +110,28 @@ def get_choice(vault):
     if os.path.exists(file):
         os.remove(file)
 
+    return None
+
 
 def consult(file, path_file, mode):
-    """open personal vault decrypt it if password correspond to hashkey"""
+    """
+    Open personal vault decrypt it if password correspond to the archive where encrypt with
+    Print login and password for a specified account register in the vault
+
+    Parameters:
+    -----------------
+    file: str
+        A "file" str is returned by calling vault.file
+    pathfile: str
+        "pathfile" is the name of the "file" transformed to path ./[filename]
+    mode: str
+        "mode" to give the parameter of open() r for reading and w for writing
+
+    Returns:
+    -----------------
+        None
+
+    """
     try:
         account, acnt_login, acnt_pwd, acnt_url = search(path_file, mode)
     except TypeError:
@@ -110,22 +143,64 @@ def consult(file, path_file, mode):
         )
         if want_add == "yes":
             mode = "a"
-            add_with_login(file, mode)
+            add(file, mode)
         else:
             consult(file, path_file, mode)
     else:
         print(
             f"Your login for {account} is {acnt_login}\nthe password associated is {acnt_pwd}\n"
         )
-        # personal_vault = encrypt_or_decrypt(password, file, "decrypt")
-    return file
+        return None
 
 
 def add(file, mode):
-    return add_with_login(file, mode)
+    """
+    Add a new account on the csv file representing the vault
+
+    Parameters:
+    -----------------
+        file: str
+            A "file" str is returned by calling vault.file
+        mode: str
+            "mode" to give the parameter of open() a for append to the current vault
+
+    Returns:
+    -----------------
+        None
+    
+    """
+    with open(file, mode) as f:
+        fieldnames = ["account", "login", "password", "url"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter="|")
+        account = input("Account Name: ").lower().strip()
+        login = input("Login: ").strip()
+        pwd = input("Password: ").strip()
+        try:
+            url = input("Url: ")
+        except:
+            url = None
+        else:
+            writer.writerow(
+                {"account": account, "login": login, "password": pwd, "url": url}
+            )
+            return None
 
 
 def generate(length):
+    """
+    Generate a random password from the ASCII table, including lower and uppercase,
+    numbers, and all specials characters
+
+    Parameters:
+    -----------------
+        length: int
+            "length" is given by user with a prompt
+
+    Returns:
+    -----------------
+        pwd_created: str
+            "pwd_created" is a random password created for the user
+    """
     pwd_created = ""
     for _ in range(length):
         char = random.randint(32, 127)
@@ -134,7 +209,32 @@ def generate(length):
 
 
 def check_existance(archive, file, mode, pwd):
-    """check if the file exist in the current folder"""
+    """
+    Check if the file exist in the current folder
+    
+    Parameters:
+    -----------------
+    file: str
+        A "file" str is returned by calling vault.file
+    archive: str
+        "archive" str returned by calling vault.archive
+    mode: str
+        "mode" to give the parameter of open() r for reading and w for writing
+    pwd: getpass object
+        "pwd" is a getpass object returned by calling vault.get_password()
+
+    Returns:
+    -----------------
+        True
+            if the file exist
+        False
+            if not
+
+    Exceptions:
+    -----------------
+        FileNotFoundError
+        IOError
+    """
     try:
         with zipfile.ZipFile(archive, mode) as a:
             with a.open(file, mode, pwd) as f:
@@ -146,7 +246,21 @@ def check_existance(archive, file, mode, pwd):
 
 
 def search(file, mode):
-    """search the account, login, pwd and url in the csv file"""
+    """
+    Search the account, login, pwd and url in the csv file
+
+    Parameters:
+    -----------------
+    file: str
+        A "file" str is returned by calling vault.file
+    mode: str
+        "mode" to give the parameter of open() r for reading and w for writing
+
+    Returns:
+    -----------------
+        row[""]
+            only if a corresponding row was found
+    """
     research = input("\nFor which account do you want get the password? ")
     research = research.lower().strip()
     with open(file, mode) as f:
@@ -157,37 +271,59 @@ def search(file, mode):
                 return row["account"], row["login"], row["password"], row["url"]
 
 
-def add_with_login(file, mode):
-    with open(file, mode) as f:
-        fieldnames = ["account", "login", "password", "url"]
-        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter="|")
-        account = input("Account Name: ").lower().strip()
-        login = input("Login: ").strip()
-        pwd = input("Password: ").strip()
-        try:
-            url = input("Url: ")
-        except:
-            url = None
-        writer.writerow(
-            {"account": account, "login": login, "password": pwd, "url": url}
-        )
-    return file
-
-
 def create(vault, mode):
+    """
+    Create a new vault with an archive and a csv file 
+
+    Parameters:
+    -----------------
+    vault: vault object
+    mode: str
+        "mode" to give the parameter of open() r for reading and w for writing
+
+    Returns:
+    -----------------
+        None
+    """
     with zipfile.ZipFile(vault.archive, mode) as a:
         with a.open(vault.file, mode) as f:
-            pass
+            return None
 
 
 def undo_zip(archive, pwd):
-    """uncompress the archive with the associated pwd"""
-    pyminizip.uncompress(archive, pwd, "./", 5)
+    """
+    Uncompress the archive with the associated pwd
+
+    Parameters:
+    -----------------
+    archive: str
+        A "archive" str is returned by calling vault.archive
+    pwd: getpass object
+        "pwd" is a getpass object returned by calling vault.get_password()
+
+    Returns:
+    -----------------
+        None
+    """
+    return pyminizip.uncompress(archive, pwd, "./", 5)
 
 
 def do_zip(archive, file, pwd):
-    """compress the archive with the associated pwd"""
-    pyminizip.compress(file, None, archive, pwd, 5)
+    """
+    Compress the archive with the associated pwd
+
+    Parameters:
+    -----------------
+    archive: str
+        A "archive" str is returned by calling vault.archive
+    pwd: getpass object
+        "pwd" is a getpass object returned by calling vault.get_password()
+
+    Returns:
+    -----------------
+        None
+    """
+    return pyminizip.compress(file, None, archive, pwd, 5)
 
 
 if __name__ == "__main__":
