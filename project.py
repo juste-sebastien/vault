@@ -81,7 +81,9 @@ def get_choice(vault):
             match choice:
                 case "consult":
                     print(f"\nGroovy we're gonna to consult your vault")
-                    file = consult(file, path_file, mode)
+                    result = consult(file, path_file, mode)
+                    if not result == None:
+                        print(result)
                 case "add":
                     print("\nLet's go for adding a new set in to your vault")
                     mode = "a"
@@ -147,10 +149,9 @@ def consult(file, path_file, mode):
         else:
             consult(file, path_file, mode)
     else:
-        print(
+        return (
             f"Your login for {account} is {acnt_login}\nthe password associated is {acnt_pwd}\n"
         )
-        return None
 
 
 def add(file, mode):
@@ -305,7 +306,7 @@ def undo_zip(archive, pwd):
     -----------------
         None
     """
-    return pyminizip.uncompress(archive, pwd, "./", 5)
+    pyminizip.uncompress(archive, pwd, "./", 5)
 
 
 def do_zip(archive, file, pwd):
@@ -323,7 +324,7 @@ def do_zip(archive, file, pwd):
     -----------------
         None
     """
-    return pyminizip.compress(file, None, archive, pwd, 5)
+    pyminizip.compress(file, None, archive, pwd, 5)
 
 
 if __name__ == "__main__":
