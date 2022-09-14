@@ -18,13 +18,78 @@ USAGE = str(
 
 
 def main():
-    get_welcome()
+    try:
+        vault = get_welcome()
+    except TypeError:
+        pass
+    else:
+        file = vault.file
+        archive = vault.archive
+        password = vault.password
+        path_file = "./" + file
+        undo_zip(archive, password)
+        while True:
+            try:
+                choice = get_choice()
+                if "quit" in choice:
+                    raise KeyboardInterrupt
+                elif not choice.isalpha():
+                    raise TypeError
+            except KeyboardInterrupt:
+                break
+            except TypeError:
+                print(f"{USAGE}")
+                pass
+            except EOFError:
+                break
+            else:
+                match choice:
+                    case "consult":
+                        print(f"\nGroovy we're gonna to consult your vault")
+                        mode = "r"
+                        try:
+                            account = consult(mode, vault)
+                        except KeyboardInterrupt:
+                            break
+                        except EOFError:
+                            print("Account seems not to be save in your Vault.")
+                            want_add = input("Do you want to add it in your Vault? (yes or no) ")
+                            if "yes" in want_add:
+                                add(vault.file, "a+")
+                            else:
+                                pass
+                        except TypeError:
+                            pass
+                        else:
+                            print(account)
+
+
+                    case "add":
+                        print("\nLet's go for adding a new set in to your vault")
+                        mode = "a"
+                        add(file, mode)
+
+                    case "generate":
+                        try:
+                            pwd = generate()
+                        except ValueError:
+                            generate()
+                        except TypeError:
+                            generate()
+                        else:
+                            print(pwd)
+
+                    case "usage":
+                        print(f"{USAGE}")
+                    case _:
+                        pass
+    print(save(vault))
 
 
 def get_welcome():
     """
     Print usage of the app and create a vault object. If the vault not exist,
-    a new vault is created by calling create(). Finally, get_choice() is called
+    a new vault is created by calling create().
 
     Parameters:
     -----------------
@@ -32,20 +97,28 @@ def get_welcome():
 
     Returns:
     -----------------
-        Call get_choice()
+        vault:
+            a vault object
     """
     print("Welcome in Vault App.\n" + f"{USAGE}\n")
     vault = vlt.Vault.get()
-    if not check_existance(vault.archive, vault.file, "r", vault.password.encode()):
-        create(vault, "w")
-    return get_choice(vault)
+    if not check_existance(vault.archive):
+        answer_create = input(
+            f"\n {vault.login} does not exist. Do you want to create it? (yes or no) "
+        ).lower().strip()
+        if answer_create == "yes":
+            create(vault, "w")
+        else:
+            raise TypeError
+    return vault
 
 
-def get_choice(vault):
+def get_choice():
     """
-    Extract csv from zip archive corresponding to vault
+    
     Prompt user to make a choice for using vault
-    User could choose between consult, add, generate, usage and quit
+    User could choose between consult, add, generate, usage and quit 
+    if not, function returns usage
 
     Parameters:
     -----------------
@@ -53,69 +126,15 @@ def get_choice(vault):
 
     Returns:
     -----------------
-        None
+        choice
     """
-    mode = "r"
-    file = vault.file
-    archive = vault.archive
-    password = vault.password
-    path_file = "./" + file
-    undo_zip(archive, password)
-    while True:
-        try:
-            choice = input("What do you want to do? ").lower().strip()
-            if "quit" in choice:
-                raise KeyboardInterrupt
-            elif not choice.isalpha():
-                raise TypeError
-        except KeyboardInterrupt:
-            print("\nThank's for using Vault!")
-            break
-        except TypeError:
-            print(f"{USAGE}")
-            pass
-        except EOFError:
-            print("\nThank's for using Vault!")
-            break
-        else:
-            match choice:
-                case "consult":
-                    print(f"\nGroovy we're gonna to consult your vault")
-                    result = consult(file, path_file, mode)
-                    if not result == None:
-                        print(result)
-                case "add":
-                    print("\nLet's go for adding a new set in to your vault")
-                    mode = "a"
-                    file = add(file, mode)
-                case "generate":
-                    print(f"Amazing, let me create a new PWD for you")
-                    try:
-                        pwd_length = int(
-                            input("Which length do you want for your Password? ")
-                        )
-                    except ValueError:
-                        print("You need to type an integer\n")
-                        get_choice(vault)
-                    except TypeError:
-                        print("You need to type an integer\n")
-                        get_choice(vault)
-                    else:
-                        print(f"{generate(pwd_length)}\n")
+    choice = input("What do you want to do? ").lower().strip()
+    if not choice in ["consult", "add", "generate", "usage", "quit"]:
+        return "usage"
+    return choice
+    
 
-                case "usage":
-                    print(f"{USAGE}")
-                case _:
-                    pass
-
-    do_zip(archive, file, password)
-    if os.path.exists(file):
-        os.remove(file)
-
-    return None
-
-
-def consult(file, path_file, mode):
+def consult(mode, vault):
     """
     Open personal vault decrypt it if password correspond to the archive where encrypt with
     Print login and password for a specified account register in the vault
@@ -135,20 +154,23 @@ def consult(file, path_file, mode):
 
     """
     try:
-        account, acnt_login, acnt_pwd, acnt_url = search(path_file, mode)
+        account, acnt_login, acnt_pwd, acnt_url = search(mode, vault)
     except TypeError:
-        print("Sorry, the account does not exist yet in your Vault")
-        want_add = (
-            input("Do you want to add a new account in your Vault? (yes or no) ")
-            .lower()
-            .strip()
-        )
-        if want_add == "yes":
-            mode = "a"
-            add(file, mode)
-        else:
-            consult(file, path_file, mode)
+            raise TypeError
+    except ValueError:
+        raise ValueError
+    except EOFError:
+        raise EOFError
+    except KeyboardInterrupt:
+        raise KeyboardInterrupt
+
     else:
+        if not "No url" in acnt_url:
+            return (
+                f"Your login for {account} is {acnt_login}\n"+
+                f"the password associated is {acnt_pwd}\n"+
+                f"on {formate_url(acnt_url)}"
+            )
         return (
             f"Your login for {account} is {acnt_login}\nthe password associated is {acnt_pwd}\n"
         )
@@ -172,57 +194,65 @@ def add(file, mode):
     """
     with open(file, mode) as f:
         fieldnames = ["account", "login", "password", "url"]
-        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter="|")
+        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=",")
         account = input("Account Name: ").lower().strip()
         login = input("Login: ").strip()
         pwd = input("Password: ").strip()
         try:
             url = input("Url: ")
-        except:
-            url = None
-        else:
-            writer.writerow(
-                {"account": account, "login": login, "password": pwd, "url": url}
-            )
-            return None
+            if url == "":
+                raise TypeError
+        except TypeError:
+            url = "No url registered"
+        writer.writerow(
+            {"account": account, "login": login, "password": pwd, "url": url}
+        )
 
 
-def generate(length):
+def generate():
     """
     Generate a random password from the ASCII table, including lower and uppercase,
     numbers, and all specials characters
 
     Parameters:
     -----------------
-        length: int
-            "length" is given by user with a prompt
+        
 
     Returns:
     -----------------
         pwd_created: str
             "pwd_created" is a random password created for the user
     """
-    pwd_created = ""
-    for _ in range(length):
-        char = random.randint(32, 127)
-        pwd_created += chr(char)
-    return pwd_created
+    print(f"Amazing, let me create a new PWD for you")
+    try:
+        pwd_length = int(
+            input("Which length do you want for your Password? ")
+        )
+    except ValueError:
+        print("You need to type an integer\n")
+        return ValueError
+    except TypeError:
+        print("You need to type an integer\n")
+        return TypeError
+    else:
+        pwd_created = ""
+        for _ in range(pwd_length):
+            char = random.randint(32, 127)
+            if chr(char) in ['"', "'", "`", ","]:
+                pass
+            else:
+                pwd_created += chr(char)
+        return f"{generate(pwd_length)}\n"
 
 
-def check_existance(archive, file, mode, pwd):
+def check_existance(archive):
     """
     Check if the file exist in the current folder
     
     Parameters:
     -----------------
-    file: str
-        A "file" str is returned by calling vault.file
     archive: str
         "archive" str returned by calling vault.archive
-    mode: str
-        "mode" to give the parameter of open() r for reading and w for writing
-    pwd: getpass object
-        "pwd" is a getpass object returned by calling vault.get_password()
 
     Returns:
     -----------------
@@ -236,17 +266,13 @@ def check_existance(archive, file, mode, pwd):
         FileNotFoundError
         IOError
     """
-    try:
-        with zipfile.ZipFile(archive, mode) as a:
-            with a.open(file, mode, pwd) as f:
-                return True
-    except FileNotFoundError as e:
-        return False
-    except IOError as e:
+    if os.path.exists(archive):
+        return True
+    else:
         return False
 
 
-def search(file, mode):
+def search(mode, vault):
     """
     Search the account, login, pwd and url in the csv file
 
@@ -262,14 +288,21 @@ def search(file, mode):
         row[""]
             only if a corresponding row was found
     """
-    research = input("\nFor which account do you want get the password? ")
-    research = research.lower().strip()
-    with open(file, mode) as f:
-        fieldnames = ["account", "login", "password", "url"]
-        reader = csv.DictReader(f, fieldnames=fieldnames, delimiter="|")
-        for row in reader:
-            if row["account"] == research:
-                return row["account"], row["login"], row["password"], row["url"]
+    try:
+        research = input("For which account do you want get the password? ").lower().strip()
+        if "quit" in research:
+            raise KeyboardInterrupt
+    except EOFError:
+        raise EOFError
+    else:
+        research = research.lower().strip()
+        with open(vault.file, mode) as f:
+            fieldnames = ["account", "login", "password", "url"]
+            reader = csv.DictReader(f, fieldnames=fieldnames, delimiter=",")
+            for row in reader:
+                if row["account"] == research:
+                    return row["account"], row["login"], row["password"], row["url"]
+            raise EOFError
 
 
 def create(vault, mode):
@@ -325,6 +358,24 @@ def do_zip(archive, file, pwd):
         None
     """
     pyminizip.compress(file, None, archive, pwd, 5)
+
+
+def formate_url(url):
+    if ("http://" or "https://") in url:
+        pass
+    elif "www." in url:
+        pass
+    else:
+        url = f"http://www.{url}"
+    return url
+
+
+
+def save(vault):
+    do_zip(vault.archive, vault.file, vault.password)
+    if os.path.exists(vault.file):
+        os.remove(vault.file)
+    return "\n Thank's for using Vault"
 
 
 if __name__ == "__main__":
