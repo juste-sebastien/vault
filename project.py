@@ -70,6 +70,7 @@ def main():
                         add(file, mode)
 
                     case "generate":
+                        print(f"Amazing, let me create a new PWD for you")
                         try:
                             pwd = generate()
                         except ValueError:
@@ -223,26 +224,27 @@ def generate():
         pwd_created: str
             "pwd_created" is a random password created for the user
     """
-    print(f"Amazing, let me create a new PWD for you")
     try:
         pwd_length = int(
             input("Which length do you want for your Password? ")
         )
     except ValueError:
         print("You need to type an integer\n")
-        return ValueError
+        raise ValueError
     except TypeError:
         print("You need to type an integer\n")
-        return TypeError
+        raise TypeError
     else:
         pwd_created = ""
-        for _ in range(pwd_length):
+        i = 0
+        while i < pwd_length:
             char = random.randint(32, 127)
             if chr(char) in ['"', "'", "`", ","]:
                 pass
             else:
                 pwd_created += chr(char)
-        return f"{generate(pwd_length)}\n"
+                i += 1
+        return pwd_created
 
 
 def check_existance(archive):
@@ -361,13 +363,16 @@ def do_zip(archive, file, pwd):
 
 
 def formate_url(url):
+    http = ""
+    www = ""
     if ("http://" or "https://") in url:
-        pass
-    elif "www." in url:
-        pass
-    else:
+        http, url = url.split("http://")
+    if "www." in url:
+        www, url = url.split("www.")
+    if http == "" or www == "":
         url = f"http://www.{url}"
-    return url
+        return url
+    return f"{http}{www}{url}"
 
 
 
