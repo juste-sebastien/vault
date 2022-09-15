@@ -94,12 +94,12 @@ def get_welcome():
 
     Parameters:
     -----------------
-        None
+    None
 
     Returns:
     -----------------
-        vault:
-            a vault object
+    vault:
+        a vault object
     """
     print("Welcome in Vault App.\n" + f"{USAGE}\n")
     vault = vlt.Vault.get()
@@ -123,11 +123,11 @@ def get_choice():
 
     Parameters:
     -----------------
-        vault: Vault object from class_vault.py
+    vault: Vault object from class_vault.py
 
     Returns:
     -----------------
-        choice
+    choice
     """
     choice = input("What do you want to do? ").lower().strip()
     if not choice in ["consult", "add", "generate", "usage", "quit"]:
@@ -142,30 +142,28 @@ def consult(mode, vault):
 
     Parameters:
     -----------------
-    file: str
-        A "file" str is returned by calling vault.file
-    pathfile: str
-        "pathfile" is the name of the "file" transformed to path ./[filename]
+    vault: vault object
     mode: str
         "mode" to give the parameter of open() r for reading and w for writing
 
     Returns:
     -----------------
-        None
+    f-str: str
+        A formatted string with account, login, password and if exist url
 
     """
-    search_return = search(mode, vault)
+    try: 
+        search_return = search(mode, vault)
+    except EOFError:
+        raise EOFError
+    except KeyboardInterrupt:
+        raise KeyboardInterrupt
     try:
         account, acnt_login, acnt_pwd, acnt_url = search_return
     except TypeError:
             raise TypeError
     except ValueError:
         raise ValueError
-    except EOFError:
-        raise EOFError
-    except KeyboardInterrupt:
-        raise KeyboardInterrupt
-
     else:
         if not "No url" in acnt_url:
             return (
@@ -184,14 +182,14 @@ def add(file, mode):
 
     Parameters:
     -----------------
-        file: str
-            A "file" str is returned by calling vault.file
-        mode: str
-            "mode" to give the parameter of open() a for append to the current vault
+    file: str
+        A "file" str is returned by calling vault.file
+    mode: str
+        "mode" to give the parameter of open() a for append to the current vault
 
     Returns:
     -----------------
-        None
+    No return
     
     """
     with open(file, mode) as f:
@@ -214,7 +212,7 @@ def add(file, mode):
 def generate():
     """
     Generate a random password from the ASCII table, including lower and uppercase,
-    numbers, and all specials characters
+    numbers, and all specials characters excluded " ' ` and ,
 
     Parameters:
     -----------------
@@ -222,8 +220,8 @@ def generate():
 
     Returns:
     -----------------
-        pwd_created: str
-            "pwd_created" is a random password created for the user
+    pwd_created: str
+        "pwd_created" is a random password created for the user
     """
     try:
         pwd_length = int(
@@ -288,8 +286,8 @@ def search(mode, vault):
 
     Returns:
     -----------------
-        row[""]
-            only if a corresponding row was found
+    row[""]: tuple
+        only if a corresponding row was found
     """
     try:
         research = input("For which account do you want get the password? ").lower().strip()

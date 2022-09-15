@@ -24,28 +24,29 @@ pip install [module_name]
 
 **get_welcome():**
     Print usage of the app and create a vault object. If the vault not exist,
-    a new vault is created by calling `create()`. Finally, `get_choice()` is called
+    a new vault is created by calling `create()`.
 
     Parameters:
     -----------------
-        None
+    None
 
     Returns:
     -----------------
-        Call `get_choice()`
+    vault: a Vault object
 
 **get_choice():**
-    Extract csv from zip archive corresponding to vault
     Prompt user to make a choice for using vault
-    User could choose between consult, add, generate, usage and quit
+    User could choose between consult, add, generate, usage and quit 
+    if not, function returns usage
 
     Parameters:
     -----------------
-        vault: Vault object from class_vault.py
+    vault: Vault object from class_vault.py
 
     Returns:
     -----------------
-        None
+    choice: str
+        The choice in the list: consult, add, generate, usage or quit
 
 
 **consult():**
@@ -54,17 +55,14 @@ pip install [module_name]
 
     Parameters:
     -----------------
-    file: str
-        A "file" str is returned by calling vault.file
-    pathfile: str
-        "pathfile" is the name of the "file" transformed to path `./[filename]`
+    vault: Vault object
     mode: str
         "mode" to give the parameter of `open()` `r` for reading and `w` for writing
 
     Returns:
     -----------------
-        None
-
+     f-str: str
+        A formatted string with account, login, password and if exist url
 
 
 **add():**
@@ -72,29 +70,27 @@ pip install [module_name]
 
     Parameters:
     -----------------
-        file: str
-            A "file" str is returned by calling `vault.file`
-        mode: str
-            "mode" to give the parameter of `open()` `a` for append to the current vault
+    file: str
+        A "file" str is returned by calling `vault.file`
+    mode: str
+        "mode" to give the parameter of `open()` `a` for append to the current vault
 
     Returns:
     -----------------
-        None
+    No return
 
 
 **generate():**
     Generate a random password from the ASCII table, including lower and uppercase,
-    numbers, and all specials characters
+    numbers, and all specials characters excluded " ' ` and ,
 
     Parameters:
     -----------------
-        length: int
-            "length" is given by user with a prompt
 
     Returns:
     -----------------
-        pwd_created: str
-            "pwd_created" is a random password created for the user
+    pwd_created: str
+        "pwd_created" is a random password created for the user
 
 
 
@@ -114,10 +110,10 @@ pip install [module_name]
 
     Returns:
     -----------------
-        True
-            if the file exist
-        False
-            if not
+    True
+        if the file exist
+    False
+        if not
 
     Exceptions:
     -----------------
@@ -137,8 +133,8 @@ pip install [module_name]
 
     Returns:
     -----------------
-        row[""]
-            only if a corresponding row was found
+    row[""]: tuple
+        only if a corresponding row was found
 
 
 **create():**
@@ -152,7 +148,7 @@ pip install [module_name]
 
     Returns:
     -----------------
-        None
+    None
 
 
 **undo_zip():**
@@ -167,7 +163,7 @@ pip install [module_name]
 
     Returns:
     -----------------
-        None
+    None
 
 
 
@@ -183,13 +179,40 @@ pip install [module_name]
 
     Returns:
     -----------------
-        None
+    None
+
+**formate_url():**
+    Formate an url "google.com" to the format "http://wwww.google.com"
+
+    Parameters:
+    -----------------
+    url: str
+        give by user when he add an account
+    
+    Returns:
+    -----------------
+    f-string: str
+        a formatted string like "http://www.google.com"
+
+**save():**
+    Call do_zip() to compress the archive and remove csv fil
+
+    Parameters:
+    -----------------
+    vault: a Vault object
+
+    Returns:
+    -----------------
+    str
+        a comment to close Vault app and granted user
 
 
 #### Features
 
 - [ ] Crypted entire file with rsa or sha512
 - [ ] Add a GUI
+- [ ] Add a DB to keep vault on a server
+- [ ] Create a mozila applet
 
 #### Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
