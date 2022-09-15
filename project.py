@@ -154,8 +154,9 @@ def consult(mode, vault):
         None
 
     """
+    search_return = search(mode, vault)
     try:
-        account, acnt_login, acnt_pwd, acnt_url = search(mode, vault)
+        account, acnt_login, acnt_pwd, acnt_url = search_return
     except TypeError:
             raise TypeError
     except ValueError:
