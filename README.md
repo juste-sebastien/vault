@@ -1,26 +1,34 @@
 # CS50's Vault Project
+***
 Copyright 2022 Sébastien Juste
 
 #### Video Demo: [click here](todo)
+***
 
 
 #### Description:
+***
 This is my project to cloturate the CS50p. The programm interact with the user to create a Vault, crypt it with a password, store all of the set of login password and url tha he want and generate some password
 
 
 #### Compatibilities
+***
 Python 3.6+
 
 
 #### Installation
+***
 Please read `requirements.txt` to get all libs using with this project and use the package manager [pip](https://pip.pypa.io/en/stable/) to install them.
 
 ```bash
-pip install [module_name]
+git clone https://github.com/juste-sebastien/vault
+cd path/to/the/file
+python3 project.py
 ```
 
 
 ##### Function
+***
 
 **get_welcome():**
     Print usage of the app and create a vault object. If the vault not exist,
@@ -208,13 +216,14 @@ pip install [module_name]
 
 
 #### Features
-
+***
 - [ ] Crypted entire file with rsa or sha512
 - [ ] Add a GUI
 - [ ] Add a DB to keep vault on a server
 - [ ] Create a mozila applet
 
 #### Contributing
+***
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
