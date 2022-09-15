@@ -318,7 +318,7 @@ def create(vault, mode):
 
     Returns:
     -----------------
-        None
+    None
     """
     with zipfile.ZipFile(vault.archive, mode) as a:
         with a.open(vault.file, mode) as f:
@@ -362,6 +362,19 @@ def do_zip(archive, file, pwd):
 
 
 def formate_url(url):
+    """
+    Formate an url "google.com" to the format "http://wwww.google.com"
+
+    Parameters:
+    -----------------
+    url: str
+        give by user when he add an account
+    
+    Returns:
+    -----------------
+    f-string: str
+        a formatted string like "http://www.google.com"
+    """
     http = ""
     www = ""
     if ("http://" or "https://") in url:
@@ -374,8 +387,19 @@ def formate_url(url):
     return f"{http}{www}{url}"
 
 
-
 def save(vault):
+    """
+    Call do_zip() to compress the archive and remove csv fil
+
+    Parameters:
+    -----------------
+    vault: a Vault object
+
+    Returns:
+    -----------------
+    str
+        a comment to close Vault app and granted user
+    """
     do_zip(vault.archive, vault.file, vault.password)
     if os.path.exists(vault.file):
         os.remove(vault.file)
