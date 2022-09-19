@@ -1,8 +1,19 @@
-# CS50's Vault Project
+# Vault App
 ***
 Copyright 2022 Sébastien Juste
 
-#### Video Demo: [click here](todo)
+
+## Table of Contents
+1. [Video Demo](#video-demo)
+2. [Description](#description)
+3. [Compatibilities](#compatibilities)
+4. [Installation](#installation)
+5. [Functions](#functions)
+6. [Features](#features)
+7. [Contributing](#contributing)
+
+
+#### Video Demo: [click here](https://youtu.be/gkvQTWA7YEw)
 ***
 
 
@@ -27,7 +38,7 @@ python3 project.py
 ```
 
 
-##### Function
+##### Functions
 ***
 
 **get_welcome():**
@@ -221,6 +232,7 @@ python3 project.py
 - [ ] Add a GUI
 - [ ] Add a DB to keep vault on a server
 - [ ] Create a mozila applet
+
 
 #### Contributing
 ***

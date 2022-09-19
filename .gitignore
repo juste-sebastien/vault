@@ -2,5 +2,6 @@ test.py
 try_readcsv.py
 test.txt
 test.zip
+test.csv
 /__pycache__
 /.pytest_cache
