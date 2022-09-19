@@ -19,6 +19,10 @@ def count_lines(vault):
             count_lines += 1
         return count_lines
 
+def test_get_welcome(monkeypatch):
+    monkeypatch.setattr("sys.stdin", StringIO("test\ntest\n"))
+    vlt = project.get_welcome()
+    assert vlt != None
 
 def test_get_choice(monkeypatch):
 
