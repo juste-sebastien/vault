@@ -2,8 +2,8 @@ import os
 import csv
 import random
 
-import classes.vault as vlt
-import archive.zip as arch
+import vault.vault as vlt
+import vault.zip as arch
 
 USAGE = str(
     "\n"
@@ -82,7 +82,7 @@ def main():
                         print(f"{USAGE}")
                     case _:
                         pass
-    print(save(vault))
+    print(arch.save(vault))
 
 
 def get_welcome():
@@ -301,25 +301,6 @@ def formate_url(url):
         url = f"http://www.{url}"
         return url
     return f"{http}{www}{url}"
-
-
-def save(vault):
-    """
-    Call do_zip() to compress the archive and remove csv fil
-
-    Parameters:
-    -----------------
-    vault: a Vault object
-
-    Returns:
-    -----------------
-    str
-        a comment to close Vault app and granted user
-    """
-    arch.do_zip(vault.archive, vault.file, vault.password)
-    if os.path.exists(vault.file):
-        os.remove(vault.file)
-    return "\n Thank's for using Vault"
 
 
 if __name__ == "__main__":

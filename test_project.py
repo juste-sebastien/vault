@@ -1,12 +1,11 @@
 import sys
-import os
 import csv
 
 import pytest
 
 import project
-import classes.vault as vlt
-import archive as arch
+import vault.zip as arch
+import vault.vault as vlt
 
 from io import StringIO
 
@@ -58,7 +57,6 @@ def test_consult(monkeypatch):
     monkeypatch.setattr(project, "search", mockreturn)
     assert project.consult("r", vault) == "Your login for add is add\nthe password associated is add\n"
 
-
 def test_add(monkeypatch):
     vault = vlt.Vault("test", "test")
     arch.undo_zip(vault.archive, vault.password)
@@ -105,15 +103,6 @@ def test_search(monkeypatch):
     monkeypatch.setattr(sys, "stdin", mock_input)
     assert project.search("r", vault) == ("test","test","test","test")
 
-
 def test_formate_url():
     assert project.formate_url("google.com") == "http://www.google.com"
     assert project.formate_url("www.google.com") == "http://www.google.com"
-
-def test_save():
-    vault = vlt.Vault("test", "test")
-    arch.undo_zip(vault.archive, vault.password)
-    assert project.save(vault) == "\n Thank's for using Vault"
-    assert not os.path.exists(vault.file) == True
-    assert os.path.exists(vault.archive) == True
-
