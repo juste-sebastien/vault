@@ -5,7 +5,8 @@ import csv
 import pytest
 
 import project
-import class_vault as vlt
+import classes.vault as vlt
+import archive as arch
 
 from io import StringIO
 
@@ -48,7 +49,7 @@ def test_get_choice(monkeypatch):
 
 def test_consult(monkeypatch):
     vault = vlt.Vault("test", "test")
-    project.undo_zip(vault.archive, vault.password)
+    arch.undo_zip(vault.archive, vault.password)
     
     def mockreturn(mode, vault):
         row = {"account": "add", "login": "add", "password": "add", "url": "No url"}
@@ -60,7 +61,7 @@ def test_consult(monkeypatch):
 
 def test_add(monkeypatch):
     vault = vlt.Vault("test", "test")
-    project.undo_zip(vault.archive, vault.password)
+    arch.undo_zip(vault.archive, vault.password)
     before = count_lines(vault)
     monkeypatch.setattr("sys.stdin", StringIO("add\nadd\nadd\n\n"))
     project.add(vault.file, "a")
@@ -85,16 +86,9 @@ def test_generate(monkeypatch):
     assert not "'" in pwd_test == True
     assert not "`" in pwd_test == True
 
-def test_check_existance():
-    true_vault = vlt.Vault("test", "test")
-    false_vault = vlt.Vault("false", "test")
-
-    assert os.path.exists(true_vault.archive) == True
-    assert os.path.exists(false_vault.archive) == False
-
 def test_search(monkeypatch):
     vault = vlt.Vault("test", "test")
-    project.undo_zip(vault.archive, vault.password)
+    arch.undo_zip(vault.archive, vault.password)
 
     with pytest.raises(KeyboardInterrupt) as exc_info:
         mock_input = StringIO("quit\n")
@@ -111,11 +105,6 @@ def test_search(monkeypatch):
     monkeypatch.setattr(sys, "stdin", mock_input)
     assert project.search("r", vault) == ("test","test","test","test")
 
-def test_create():
-    vault2 = vlt.Vault("pikachu", "test")
-    project.create(vault2, mode="w")
-    assert os.path.exists(vault2.archive) == True
-    os.remove(vault2.archive)
 
 def test_formate_url():
     assert project.formate_url("google.com") == "http://www.google.com"
@@ -123,7 +112,7 @@ def test_formate_url():
 
 def test_save():
     vault = vlt.Vault("test", "test")
-    project.undo_zip(vault.archive, vault.password)
+    arch.undo_zip(vault.archive, vault.password)
     assert project.save(vault) == "\n Thank's for using Vault"
     assert not os.path.exists(vault.file) == True
     assert os.path.exists(vault.archive) == True

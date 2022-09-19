@@ -2,10 +2,8 @@ import os
 import csv
 import random
 
-import zipfile
-import pyminizip
-
-import class_vault as vlt
+import classes.vault as vlt
+import archive.zip as arch
 
 USAGE = str(
     "\n"
@@ -27,7 +25,7 @@ def main():
         archive = vault.archive
         password = vault.password
         path_file = "./" + file
-        undo_zip(archive, password)
+        arch.undo_zip(archive, password)
         while True:
             try:
                 choice = get_choice()
@@ -70,7 +68,7 @@ def main():
                         add(file, mode)
 
                     case "generate":
-                        print(f"Amazing, let me create a new PWD for you")
+                        print("\nAmazing, let me create a new PWD for you")
                         try:
                             pwd = generate()
                         except ValueError:
@@ -103,12 +101,12 @@ def get_welcome():
     """
     print("Welcome in Vault App.\n" + f"{USAGE}\n")
     vault = vlt.Vault.get()
-    if not check_existance(vault.archive):
+    if not arch.check_existance(vault.archive):
         answer_create = input(
             f"\n {vault.login} does not exist. Do you want to create it? (yes or no) "
         ).lower().strip()
         if answer_create == "yes":
-            create(vault, "w")
+            arch.zip.create(vault, "w")
         else:
             raise TypeError
     return vault
@@ -129,7 +127,7 @@ def get_choice():
     -----------------
     choice
     """
-    choice = input("What do you want to do? ").lower().strip()
+    choice = input("\nWhat do you want to do? ").lower().strip()
     if not choice in ["consult", "add", "generate", "usage", "quit"]:
         return "usage"
     return choice
@@ -246,33 +244,6 @@ def generate():
         return pwd_created
 
 
-def check_existance(archive):
-    """
-    Check if the file exist in the current folder
-    
-    Parameters:
-    -----------------
-    archive: str
-        "archive" str returned by calling vault.archive
-
-    Returns:
-    -----------------
-        True
-            if the file exist
-        False
-            if not
-
-    Exceptions:
-    -----------------
-        FileNotFoundError
-        IOError
-    """
-    if os.path.exists(archive):
-        return True
-    else:
-        return False
-
-
 def search(mode, vault):
     """
     Search the account, login, pwd and url in the csv file
@@ -304,61 +275,6 @@ def search(mode, vault):
                 if row["account"] == research:
                     return row["account"], row["login"], row["password"], row["url"]
             raise EOFError
-
-
-def create(vault, mode):
-    """
-    Create a new vault with an archive and a csv file 
-
-    Parameters:
-    -----------------
-    vault: vault object
-    mode: str
-        "mode" to give the parameter of open() r for reading and w for writing
-
-    Returns:
-    -----------------
-    None
-    """
-    with zipfile.ZipFile(vault.archive, mode) as a:
-        with a.open(vault.file, mode) as f:
-            return None
-
-
-def undo_zip(archive, pwd):
-    """
-    Uncompress the archive with the associated pwd
-
-    Parameters:
-    -----------------
-    archive: str
-        A "archive" str is returned by calling vault.archive
-    pwd: getpass object
-        "pwd" is a getpass object returned by calling vault.get_password()
-
-    Returns:
-    -----------------
-        None
-    """
-    pyminizip.uncompress(archive, pwd, "./", 5)
-
-
-def do_zip(archive, file, pwd):
-    """
-    Compress the archive with the associated pwd
-
-    Parameters:
-    -----------------
-    archive: str
-        A "archive" str is returned by calling vault.archive
-    pwd: getpass object
-        "pwd" is a getpass object returned by calling vault.get_password()
-
-    Returns:
-    -----------------
-        None
-    """
-    pyminizip.compress(file, None, archive, pwd, 5)
 
 
 def formate_url(url):
@@ -400,7 +316,7 @@ def save(vault):
     str
         a comment to close Vault app and granted user
     """
-    do_zip(vault.archive, vault.file, vault.password)
+    arch.do_zip(vault.archive, vault.file, vault.password)
     if os.path.exists(vault.file):
         os.remove(vault.file)
     return "\n Thank's for using Vault"
