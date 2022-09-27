@@ -20,6 +20,14 @@ USAGE = str(
     + "usage -> when you don't know what to do"
 )
 
+WARNS = str(
+    "\n"
+    + "You can type any password that you want to get an account set"
+    + "but if you can't read it clearly, it's because it's the wrong password.\n"
+    + "Vault App don't permitted to recover password.\n"
+    + "Keep it in safe place ;)"
+)
+
 
 def main():
     try:
@@ -57,7 +65,7 @@ def get_welcome():
     vault:
         a vault object
     """
-    print("Welcome in Vault App.\n" + f"{USAGE}\n")
+    print("Welcome in Vault App.\n" + f"{WARNS}\n{USAGE}\n")
     vault = vlt.Vault.get()
     if not arch.check_existance(vault.archive):
         answer_create = input(
