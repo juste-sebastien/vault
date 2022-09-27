@@ -1,12 +1,13 @@
 import os
+import shutil
 import zipfile
 
 import pyminizip
 
 
-def undo_zip(archive, pwd):
+def undo_zip(vault):
     """
-    Uncompress the archive with the associated pwd
+    Uncompress the archive with the associated pwd in a temporary directory
 
     Parameters:
     -----------------
@@ -17,12 +18,24 @@ def undo_zip(archive, pwd):
 
     Returns:
     -----------------
-        None
+    f-string: str
+        name of temporary directory
+
     """
-    pyminizip.uncompress(archive, pwd, "./", 5)
+    vault.temp = f"{vault.parent}/{vault.login}/"
+    try:
+        os.mkdir(vault.temp)
+    except FileExistsError:
+        pass
+    
+    os.chdir(vault.temp)
+    try:
+        pyminizip.uncompress(vault.path, vault.password, vault.temp, 1)
+    except OSError:
+        pass
 
 
-def do_zip(archive, file, pwd):
+def do_zip(vault):
     """
     Compress the archive with the associated pwd
 
@@ -35,9 +48,25 @@ def do_zip(archive, file, pwd):
 
     Returns:
     -----------------
-        None
+        No return
     """
-    pyminizip.compress(file, None, archive, pwd, 5)
+    file_list = os.listdir(vault.temp)
+    path_list =[]
+    for _ in range(len(file_list)):
+        file_path = vault.temp
+        path_list.append(file_path)
+    if len(file_list) != 1:
+        pyminizip.compress_multiple(file_list, [], vault.archive, vault.password, 5)
+    else:
+        pyminizip.compress(file_list[0], None, vault.archive, vault.password, 5)
+    
+    if check_existance(vault.path):
+        os.remove(vault.path)
+    
+    shutil.move(vault.archive, "../")
+
+    
+
 
 
 def create(vault, mode):
@@ -55,18 +84,17 @@ def create(vault, mode):
     None
     """
     with zipfile.ZipFile(vault.archive, mode) as a:
-        with a.open(vault.file, mode) as f:
-            return None
+        return None
 
 
-def check_existance(archive):
+def check_existance(file):
     """
     Check if the file exist in the current folder
 
     Parameters:
     -----------------
-    archive: str
-        "archive" str returned by calling vault.archive
+    file: str
+        the path of the file which need to check existance
 
     Returns:
     -----------------
@@ -80,7 +108,7 @@ def check_existance(archive):
         FileNotFoundError
         IOError
     """
-    if os.path.exists(archive):
+    if os.path.exists(file):
         return True
     else:
         return False
@@ -99,7 +127,7 @@ def save(vault):
     str
         a comment to close Vault app and granted user
     """
-    do_zip(vault.archive, vault.file, vault.password)
-    if os.path.exists(vault.file):
-        os.remove(vault.file)
+    do_zip(vault)
+    os.chdir("../")
+    shutil.rmtree(vault.temp)
     return "\n Thank's for using Vault"

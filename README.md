@@ -214,7 +214,7 @@ python3 project.py
         a formatted string like "http://www.google.com"
 
 **save():**
-    Call do_zip() to compress the archive and remove csv fil
+    Call do_zip() to compress the archive and remove csv file
 
     Parameters:
     -----------------
@@ -228,7 +228,7 @@ python3 project.py
 
 #### Features
 ***
-- [ ] Crypted entire file with rsa or sha512
+- [X] Crypted entire file
 - [ ] Add a GUI
 - [ ] Add a DB to keep vault on a server
 - [ ] Create a mozila applet

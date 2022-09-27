@@ -19,12 +19,9 @@ def generate():
         pwd_length = int(
             input("Which length do you want for your Password? ")
         )
-    except ValueError:
-        print("You need to type an integer\n")
-        raise ValueError
-    except TypeError:
-        print("You need to type an integer\n")
-        raise TypeError
+    except (ValueError, TypeError):
+        print("You need to type an integer")
+        generate()
     else:
         pwd_created = ""
         i = 0

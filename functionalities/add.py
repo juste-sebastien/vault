@@ -1,7 +1,12 @@
+import json
 import csv
-import crypt.encrypt as crypt
 
-def add(vault, file, mode):
+import vault.account as vlt_acnt
+
+import crypt.encrypt as encrypt
+
+
+def add(vault):
     """
     Add a new account on the csv file representing the vault
 
@@ -14,23 +19,37 @@ def add(vault, file, mode):
 
     Returns:
     -----------------
-    No return
+    f-string: str
+        f-string from save_file()
     
     """
-    with open(file, mode) as f:
-        writer = csv.writer(f, delimiter=",")
-        account = input("Account Name: ").lower().strip()
-        login = input("Login: ").strip()
-        pwd = input("Password: ").strip()
-        try:
-            url = input("Url: ")
-            if url == "":
-                raise TypeError
-        except TypeError:
-            url = "No url registered"
-        row = f"{account}|{login}|{pwd}|{url}"
-        writer.writerow(
-            crypt.encrypt(vault, row)
-        )
+    account = vlt_acnt.Account.get()
+    text = {"account": account.name, "login": account.login, "pwd": account.pwd, "url": account.url}
+    row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
+    account.setting = row
+    return save_file(account, vault)
 
 
+def not_existing(vault):
+    print("Account seems not to be save in your Vault.")
+    want_add = input("Do you want to add it in your Vault? (yes or no) ")
+    if "yes" in want_add:
+        return add(vault)
+    else:
+        raise KeyboardInterrupt
+
+
+def save_file(account, vault):
+    acnt_filepath = vault.temp + account.file
+    with open(acnt_filepath, "x") as file:
+        ciphertext = encrypt.encrypt(vault, account.setting)
+        set_in_csv = json.loads(ciphertext)
+        col_a = set_in_csv["nonce"]
+        col_b = set_in_csv["header"]
+        col_c = set_in_csv["ciphertext"]
+        col_d = set_in_csv["tag"]
+        fieldnames = ["col a", "col b", "col c", "col d"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writerow({"col a": col_a, "col b": col_b, "col c": col_c, "col d": col_d})
+    return f"{account.name} had been added to your Vault"
+    
