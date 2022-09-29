@@ -10,6 +10,7 @@ import functionalities.generate as funct_generate
 import functionalities.consult as funct_consult
 import functionalities.add as funct_add
 import functionalities.modify as funct_modify
+import functionalities.delete as funct_delete
 
 USAGE = str(
     "\n"
@@ -133,7 +134,13 @@ def do_function(choice, vault):
             return f"{USAGE}"
 
         case "modify":
+            print("\nLet's go to modify an account")
             return funct_modify.do_modifying(vault)
+
+        case "delete":
+            print("Oh my god let's deleting an account")
+            return funct_delete.delete_account(vault)
+
 
         case _:
             raise EOFError
