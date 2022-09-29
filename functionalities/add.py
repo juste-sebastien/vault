@@ -1,3 +1,5 @@
+import os
+
 import json
 import csv
 
@@ -27,7 +29,8 @@ def add(vault):
     text = {"account": account.name, "login": account.login, "pwd": account.pwd, "url": account.url}
     row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
     account.setting = row
-    return save_file(account, vault, "x", "added")
+    save_file(account, vault, "w", "added")
+    return account
 
 
 def not_existing(vault):
@@ -51,5 +54,7 @@ def save_file(account, vault, mode, operation):
         fieldnames = ["col a", "col b", "col c", "col d"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writerow({"col a": col_a, "col b": col_b, "col c": col_c, "col d": col_d})
+    if operation == "added":
+        vault.content = os.listdir()
     return f"{account.name} had been {operation} to your Vault"
     

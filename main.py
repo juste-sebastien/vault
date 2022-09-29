@@ -14,10 +14,11 @@ import functionalities.delete as funct_delete
 
 USAGE = str(
     "\n"
-    + "consult -> for consulting a password in your vault\n"
+    + "consult -> for consulting a password in your Vault\n"
     + "generate -> for generating a new password\n"
-    + "add -> for adding a new account(login + password) in to your vault\n"
+    + "add -> for adding a new account(login + password) in to your Vault\n"
     + "modify -> for modifying an existing account\n"
+    + "list -> to see which accounts are saved in to your Vaul"
     + "CTRL + D or CTRL + C or quit -> to save your vault and quit program\n"
     + "usage -> when you don't know what to do"
 )
@@ -99,7 +100,7 @@ def get_choice():
     choice = input("\nWhat do you want to do? ").lower().strip()
     if "quit" in choice:
         raise KeyboardInterrupt
-    if not choice in ["consult", "add", "generate", "usage", "modify", "list"]:
+    if not choice in ["consult", "add", "generate", "usage", "modify", "list", "delete"]:
         return "usage"
     return choice
 
