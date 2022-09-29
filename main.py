@@ -99,7 +99,7 @@ def get_choice():
     choice = input("\nWhat do you want to do? ").lower().strip()
     if "quit" in choice:
         raise KeyboardInterrupt
-    if not choice in ["consult", "add", "generate", "usage", "modify"]:
+    if not choice in ["consult", "add", "generate", "usage", "modify", "list"]:
         return "usage"
     return choice
 
@@ -140,6 +140,10 @@ def do_function(choice, vault):
         case "delete":
             print("Oh my god let's deleting an account")
             return funct_delete.delete_account(vault)
+
+        case "list": 
+            for file in vault.content:
+                print(file.strip(".csv"))
 
 
         case _:
