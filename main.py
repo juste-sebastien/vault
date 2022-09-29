@@ -2,7 +2,6 @@ import sys
 import os
 
 from curses.ascii import isalnum
-import json
 
 import vault.vault as vlt
 import vault.zip as arch
@@ -10,12 +9,14 @@ import vault.zip as arch
 import functionalities.generate as funct_generate
 import functionalities.consult as funct_consult
 import functionalities.add as funct_add
+import functionalities.modify as funct_modify
 
 USAGE = str(
     "\n"
     + "consult -> for consulting a password in your vault\n"
     + "generate -> for generating a new password\n"
     + "add -> for adding a new account(login + password) in to your vault\n"
+    + "modify -> for modifying an existing account\n"
     + "CTRL + D or CTRL + C or quit -> to save your vault and quit program\n"
     + "usage -> when you don't know what to do"
 )
@@ -36,6 +37,7 @@ def main():
         sys.exit("Thank's for using Vault App")
 
     arch.undo_zip(vault)
+    vault.content = os.listdir()
 
     while True:
         try:
@@ -96,7 +98,7 @@ def get_choice():
     choice = input("\nWhat do you want to do? ").lower().strip()
     if "quit" in choice:
         raise KeyboardInterrupt
-    if not choice in ["consult", "add", "generate", "usage"]:
+    if not choice in ["consult", "add", "generate", "usage", "modify"]:
         return "usage"
     return choice
 
@@ -129,6 +131,10 @@ def do_function(choice, vault):
 
         case "usage":
             return f"{USAGE}"
+
+        case "modify":
+            return funct_modify.do_modifying(vault)
+
         case _:
             raise EOFError
 

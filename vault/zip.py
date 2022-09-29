@@ -50,15 +50,15 @@ def do_zip(vault):
     -----------------
         No return
     """
-    file_list = os.listdir(vault.temp)
+    vault.content = os.listdir(vault.temp)
     path_list =[]
-    for _ in range(len(file_list)):
+    for _ in range(len(vault.content)):
         file_path = vault.temp
         path_list.append(file_path)
-    if len(file_list) != 1:
-        pyminizip.compress_multiple(file_list, [], vault.archive, vault.password, 5)
+    if len(vault.content) != 1:
+        pyminizip.compress_multiple(vault.content, [], vault.archive, vault.password, 5)
     else:
-        pyminizip.compress(file_list[0], None, vault.archive, vault.password, 5)
+        pyminizip.compress(vault.content[0], None, vault.archive, vault.password, 5)
     
     if check_existance(vault.path):
         os.remove(vault.path)

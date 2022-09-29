@@ -27,7 +27,7 @@ def add(vault):
     text = {"account": account.name, "login": account.login, "pwd": account.pwd, "url": account.url}
     row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
     account.setting = row
-    return save_file(account, vault)
+    return save_file(account, vault, "x", "added")
 
 
 def not_existing(vault):
@@ -39,9 +39,9 @@ def not_existing(vault):
         raise KeyboardInterrupt
 
 
-def save_file(account, vault):
+def save_file(account, vault, mode, operation):
     acnt_filepath = vault.temp + account.file
-    with open(acnt_filepath, "x") as file:
+    with open(acnt_filepath, mode) as file:
         ciphertext = encrypt.encrypt(vault, account.setting)
         set_in_csv = json.loads(ciphertext)
         col_a = set_in_csv["nonce"]
@@ -51,5 +51,5 @@ def save_file(account, vault):
         fieldnames = ["col a", "col b", "col c", "col d"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writerow({"col a": col_a, "col b": col_b, "col c": col_c, "col d": col_d})
-    return f"{account.name} had been added to your Vault"
+    return f"{account.name} had been {operation} to your Vault"
     

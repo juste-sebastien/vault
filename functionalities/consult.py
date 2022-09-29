@@ -1,5 +1,4 @@
-import json
-import csv
+import os
 
 import crypt.decrypt as crypt
 
@@ -24,30 +23,26 @@ def consult(mode, vault):
         A formatted string with account, login, password and if exist url
 
     """
+    prompt = "For which account do you want get the password? "
     try: 
-        current_account = search(mode, vault)
+        account = search(mode, vault, prompt)
     except EOFError:
         raise EOFError
     except KeyboardInterrupt:
         raise KeyboardInterrupt
 
-    try:
-        acnt_name, acnt_login, acnt_pwd, acnt_url = current_account
-    except:
-        return current_account
-    else:
-        if not "No url" in acnt_url:
-            return (
-                f"Your login for {acnt_name} is {acnt_login}\n"+
-                f"the password associated is {acnt_pwd}\n"+
-                f"on {formate_url(acnt_url)}"
-            )
+    if not "No url" in account.url:
         return (
-            f"Your login for {acnt_name} is {acnt_login}\nthe password associated is {acnt_pwd}\n"
+            f"Your login for {account.name} is {account.login}\n"+
+            f"the password associated is {account.pwd}\n"+
+            f"on {formate_url(account.url)}"
         )
+    return (
+        f"Your login for {account.name} is {account.login}\nthe password associated is {account.pwd}\n"
+    )
     
 
-def search(mode, vault):
+def search(mode, vault, prompt):
     """
     Search the account, login, pwd and url in the csv file
 
@@ -64,30 +59,29 @@ def search(mode, vault):
         only if a corresponding data was found
     """
     try:
-        research = input("For which account do you want get the password? ").lower().strip()
+        research = input(prompt).lower().strip()
         if "quit" in research:
             raise KeyboardInterrupt
     except EOFError:
         raise EOFError
 
-
     research = research.lower().strip()
-    account_file = vault.temp + research + ".csv"
-    if check_existance(account_file):
+    account_file = research + ".csv"
+    print(os.getcwd(), f"\n{account_file}")
+    if account_file in vault.content:
         with open(account_file, mode) as f:
-            file_content = f.read()
-            nonce, header, ciphertext, tag = file_content.split(",")
-            content = {"nonce": nonce, "header": header, "ciphertext": ciphertext, "tag": tag}
-            content = json.dumps(content)
-            data = crypt.decrypt(vault, content).replace("'", '"')
-            data = json.loads(data)
-            if research in data["ciphertext"]["account"]:
-                account = data["ciphertext"]["account"]
-                login = data["ciphertext"]["login"]
-                password = data["ciphertext"]["pwd"]
-                url = data["ciphertext"]["url"]
-                return account, login, password, url
-            raise EOFError
+            data = crypt.get_decrypt_data(vault, f)
+            print(data)
+            name = data["ciphertext"]["account"]
+            login = data["ciphertext"]["login"]
+            password = data["ciphertext"]["pwd"]
+            url = data["ciphertext"]["url"]
+            find_account = account.Account(name, login, password, url)
+            if find_account:
+                print("account was found")
+                return find_account
+            else:
+                raise EOFError
     else:
         return funct_add.not_existing(vault)
 

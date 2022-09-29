@@ -10,6 +10,7 @@ class Vault:
         self.temp = ""
         self.parent = f"{os.getcwd()}/"
         self.path = self.parent + self.archive
+        self.content = ""
 
     @property
     def login(self):
@@ -34,6 +35,14 @@ class Vault:
     @temp.setter
     def temp(self, temp_dir):
         self._temp = temp_dir
+
+    @property
+    def content(self):
+        return self._content
+
+    @content.setter
+    def content(self, list_file):
+        self._content = list_file
 
     @classmethod
     def get(cls):
