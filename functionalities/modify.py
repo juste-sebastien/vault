@@ -40,16 +40,16 @@ def get_parameter():
 
 
 def change_set(account, parameter):
-    if parameter == "name" or parameter == "n":
+    if parameter in ["name", "n"]:
         account.name = str(input("New account name: "))
         return True
-    elif parameter == "login" or parameter == "l":
+    elif parameter in ["login", "l"]:
         account.login = str(input("New account login: "))
         return True
-    elif parameter == "password" or parameter == "p" or parameter == "pwd":
+    elif parameter in ["password", "pwd", "p"]:
         account.pwd = getpass.getpass()
         return True
-    elif parameter == "url" or parameter == "u":
+    elif parameter in ["url", "u"]:
         account.url = str(input("New account name: "))
         return True
     else:

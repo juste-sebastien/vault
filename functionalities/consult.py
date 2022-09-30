@@ -62,12 +62,11 @@ def search(mode, vault, prompt):
         research = input(prompt).lower().strip()
         if "quit" in research:
             raise KeyboardInterrupt
-    except EOFError:
-        raise EOFError
+    except Exception:
+        raise KeyboardInterrupt
 
     research = research.lower().strip()
     account_file = research + ".csv"
-    print(os.getcwd(), f"\n{account_file}")
     if account_file in vault.content:
         with open(account_file, mode) as f:
             data = crypt.get_decrypt_data(vault, f)
@@ -76,14 +75,8 @@ def search(mode, vault, prompt):
             login = data["ciphertext"]["login"]
             password = data["ciphertext"]["pwd"]
             url = data["ciphertext"]["url"]
-            find_account = account.Account(name, login, password, url)
-            if find_account:
-                print("account was found")
-                return find_account
-            else:
-                raise EOFError
-    else:
-        return funct_add.not_existing(vault)
+            return account.Account(name, login, password, url)
+    raise EOFError
 
 def formate_url(url):
     """
@@ -99,13 +92,13 @@ def formate_url(url):
     f-string: str
         a formatted string like "http://www.google.com"
     """
-    http = ""
-    www = ""
-    if ("http://" or "https://") in url:
-        http, url = url.split("http://")
+    http = "http"
+    www = "www"
+    if "http://" in url:
+        http, url = url.split("://")
+    elif "https://" in url:
+        http, url = url.split("://")
+
     if "www." in url:
-        www, url = url.split("www.")
-    if http == "" or www == "":
-        url = f"http://www.{url}"
-        return url
-    return f"{http}{www}{url}"
+        url = url.split(".", maxsplit=1)
+    return f"{http}://{www}.{url}"
