@@ -16,11 +16,5 @@ def test_check_existance():
     assert os.path.exists(true_vault.archive) == True
     assert os.path.exists(false_vault.archive) == False
 
-def test_save():
-    vlt = vault.Vault("test", "test")
-    zip.undo_zip(vlt.archive, vlt.password)
-    assert zip.save(vlt) == "\n Thank's for using Vault"
-    assert not os.path.exists(vlt.file) == True
-    assert os.path.exists(vlt.archive) == True
 
 
