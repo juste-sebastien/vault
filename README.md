@@ -34,7 +34,7 @@ Please read `requirements.txt` to get all libs using with this project and use t
 ```bash
 git clone https://github.com/juste-sebastien/vault
 cd path/to/the/file
-python3 project.py
+python3 main.py
 ```
 
 
