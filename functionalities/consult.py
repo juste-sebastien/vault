@@ -6,6 +6,7 @@ from vault.zip import check_existance
 import vault.account as account
 import functionalities.add as funct_add
 
+
 def consult(mode, vault):
     """
     Open personal vault decrypt it if password correspond to the archive where encrypt with
@@ -24,7 +25,7 @@ def consult(mode, vault):
 
     """
     prompt = "For which account do you want get the password? "
-    try: 
+    try:
         account = search(mode, vault, prompt)
     except EOFError:
         raise EOFError
@@ -33,14 +34,12 @@ def consult(mode, vault):
 
     if not "No url" in account.url:
         return (
-            f"Your login for {account.name} is {account.login}\n"+
-            f"the password associated is {account.pwd}\n"+
-            f"on {formate_url(account.url)}"
+            f"Your login for {account.name} is {account.login}\n"
+            + f"the password associated is {account.pwd}\n"
+            + f"on {formate_url(account.url)}"
         )
-    return (
-        f"Your login for {account.name} is {account.login}\nthe password associated is {account.pwd}\n"
-    )
-    
+    return f"Your login for {account.name} is {account.login}\nthe password associated is {account.pwd}\n"
+
 
 def search(mode, vault, prompt):
     """
@@ -78,6 +77,7 @@ def search(mode, vault, prompt):
             return account.Account(name, login, password, url)
     raise EOFError
 
+
 def formate_url(url):
     """
     Formate an url "google.com" to the format "http://wwww.google.com"
@@ -86,7 +86,7 @@ def formate_url(url):
     -----------------
     url: str
         give by user when he add an account
-    
+
     Returns:
     -----------------
     f-string: str

@@ -14,15 +14,21 @@ def test_not_existing(monkeypatch):
         funct_add.not_existing(vault)
     assert exc_info.type == KeyboardInterrupt
 
+
 def test_add(monkeypatch):
     vault = vlt.Vault("test", "test")
-    mock_input = StringIO("test\ntest\ntest\ntest.com\n") 
-    monkeypatch.setattr("sys.stdin", mock_input)   
+    mock_input = StringIO("test\ntest\ntest\ntest.com\n")
+    monkeypatch.setattr("sys.stdin", mock_input)
     account = funct_add.add(vault)
     assert account.name == "test"
     assert account.setting == {
-        "nonce": "", 
-        "header": "", 
-        "ciphertext": {"account": account.name, "login": account.login, "pwd": account.pwd, "url": account.url}, 
-        "tag": ""
-        }
+        "nonce": "",
+        "header": "",
+        "ciphertext": {
+            "account": account.name,
+            "login": account.login,
+            "pwd": account.pwd,
+            "url": account.url,
+        },
+        "tag": "",
+    }

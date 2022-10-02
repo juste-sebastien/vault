@@ -3,7 +3,7 @@ import os
 
 
 class Vault:
-    def __init__ (self, login, password):
+    def __init__(self, login, password):
         self.login = login
         self.password = password
         self.archive = f"{login}.zip"
@@ -23,7 +23,7 @@ class Vault:
     @property
     def password(self):
         return self._password
-    
+
     @password.setter
     def password(self, password):
         self._password = password

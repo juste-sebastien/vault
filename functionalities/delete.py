@@ -2,6 +2,7 @@ import os
 
 import functionalities.add as funct_add
 
+
 def delete_account(vault):
     account_name = str(input("Which account do you want to delete? ")).strip().lower()
     if "quit" in account_name:
@@ -13,7 +14,7 @@ def delete_account(vault):
     else:
         return funct_add.not_existing(vault)
 
-    
+
 def remove_file(file, vault):
     os.remove(file)
     vault.content = os.listdir()

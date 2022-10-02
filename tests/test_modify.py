@@ -4,6 +4,7 @@ import functionalities.modify as modify
 import vault.vault as vlt
 import vault.account as acnt
 
+
 def test_change_set(monkeypatch):
     account = acnt.Account("test", "test", "test", "No url")
     mockinput = StringIO("modified\n")

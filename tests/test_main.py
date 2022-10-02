@@ -12,6 +12,7 @@ def test_get_welcome(monkeypatch):
     vlt = main.get_welcome()
     assert vlt != None
 
+
 def test_get_choice(monkeypatch):
 
     mock_input = StringIO("consult\n")
@@ -57,14 +58,8 @@ def test_do_function(monkeypatch):
     vault = vlt.Vault("test", "test")
     mock_input = StringIO("15\n")
     monkeypatch.setattr("sys.stdin", mock_input)
-    result = main.do_function("generate", vault) 
+    result = main.do_function("generate", vault)
     assert len(result) == 15
 
     result = main.do_function("usage", vault)
     assert result == main.USAGE
-
-
-
-
-
-

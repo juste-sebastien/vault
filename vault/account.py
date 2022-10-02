@@ -5,6 +5,7 @@ import vault.vault as vault
 
 import functionalities.consult as consult
 
+
 class Account:
     def __init__(self, name, login, password, url):
         self.name = name
@@ -13,7 +14,6 @@ class Account:
         self.url = url
         self.file = f"{self.name}.csv"
         self.setting = {}
-
 
     @property
     def name(self):
@@ -42,7 +42,7 @@ class Account:
     @property
     def url(self):
         return self._url
-    
+
     @url.setter
     def url(self, url):
         if not url:
@@ -72,7 +72,6 @@ class Account:
             url = "No url registered"
         finally:
             return Account(name, login, password, url)
-
 
     def is_existing_file(self):
         if os.path.exists(self.file):

@@ -72,9 +72,13 @@ def get_welcome():
     print("Welcome in Vault App.\n" + f"{WARNS}\n{USAGE}\n")
     vault = vlt.Vault.get()
     if not arch.check_existance(vault.archive):
-        answer_create = input(
-            f"\n {vault.login} does not exist. Do you want to create it? (yes or no) "
-        ).lower().strip()
+        answer_create = (
+            input(
+                f"\n {vault.login} does not exist. Do you want to create it? (yes or no) "
+            )
+            .lower()
+            .strip()
+        )
         if answer_create == "yes" or answer_create == "y":
             arch.create(vault, "w")
         else:
@@ -84,9 +88,9 @@ def get_welcome():
 
 def get_choice():
     """
-    
+
     Prompt user to make a choice for using vault
-    User could choose between consult, add, generate, usage and quit 
+    User could choose between consult, add, generate, usage and quit
     if not, generate returns usage
 
     Parameters:
@@ -100,7 +104,15 @@ def get_choice():
     choice = input("\nWhat do you want to do? ").lower().strip()
     if "quit" in choice:
         raise KeyboardInterrupt
-    if not choice in ["consult", "add", "generate", "usage", "modify", "list", "delete"]:
+    if not choice in [
+        "consult",
+        "add",
+        "generate",
+        "usage",
+        "modify",
+        "list",
+        "delete",
+    ]:
         return "usage"
     return choice
 
@@ -120,7 +132,6 @@ def do_function(choice, vault):
                 raise TypeError
 
             return account
-
 
         case "add":
             print("\nLet's go for adding a new set in to your vault")
@@ -142,10 +153,9 @@ def do_function(choice, vault):
             print("Oh my god let's deleting an account")
             return funct_delete.delete_account(vault)
 
-        case "list": 
+        case "list":
             for file in vault.content:
                 print(file.strip(".csv"))
-
 
         case _:
             raise EOFError

@@ -8,7 +8,7 @@ def generate():
 
     Parameters:
     -----------------
-        
+
 
     Returns:
     -----------------
@@ -16,9 +16,7 @@ def generate():
         "pwd_created" is a random password created for the user
     """
     try:
-        pwd_length = int(
-            input("Which length do you want for your Password? ")
-        )
+        pwd_length = int(input("Which length do you want for your Password? "))
     except (ValueError, TypeError):
         print("You need to type an integer")
         generate()
@@ -33,4 +31,3 @@ def generate():
                 pwd_created += chr(char)
                 i += 1
         return pwd_created
-

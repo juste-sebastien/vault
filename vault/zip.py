@@ -27,7 +27,7 @@ def undo_zip(vault):
         os.mkdir(vault.temp)
     except FileExistsError:
         pass
-    
+
     os.chdir(vault.temp)
     try:
         pyminizip.uncompress(vault.path, vault.password, vault.temp, 1)
@@ -51,7 +51,7 @@ def do_zip(vault):
         No return
     """
     vault.content = os.listdir(vault.temp)
-    path_list =[]
+    path_list = []
     for _ in range(len(vault.content)):
         file_path = vault.temp
         path_list.append(file_path)
@@ -59,14 +59,11 @@ def do_zip(vault):
         pyminizip.compress_multiple(vault.content, [], vault.archive, vault.password, 5)
     else:
         pyminizip.compress(vault.content[0], None, vault.archive, vault.password, 5)
-    
+
     if check_existance(vault.path):
         os.remove(vault.path)
-    
+
     shutil.move(vault.archive, "../")
-
-    
-
 
 
 def create(vault, mode):

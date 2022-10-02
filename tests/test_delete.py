@@ -10,7 +10,7 @@ def test_delete(monkeypatch):
     mockinput = StringIO("quit\n")
     vault = vlt.Vault("test", "test")
     vault.content = ["test.csv"]
-    
+
     def mockreturn_remove_file(file, vault):
         return True
 
@@ -23,4 +23,3 @@ def test_delete(monkeypatch):
     monkeypatch.setattr("sys.stdin", mockinput)
     monkeypatch.setattr("functionalities.delete.remove_file", mockreturn_remove_file)
     assert delete.delete_account(vault) == "test was deleted from your Vault"
-

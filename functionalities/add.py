@@ -23,10 +23,15 @@ def add(vault):
     -----------------
     f-string: str
         f-string from save_file()
-    
+
     """
     account = vlt_acnt.Account.get()
-    text = {"account": account.name, "login": account.login, "pwd": account.pwd, "url": account.url}
+    text = {
+        "account": account.name,
+        "login": account.login,
+        "pwd": account.pwd,
+        "url": account.url,
+    }
     row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
     account.setting = row
     save_file(account, vault, "w", "added")
@@ -53,8 +58,9 @@ def save_file(account, vault, mode, operation):
         col_d = set_in_csv["tag"]
         fieldnames = ["col a", "col b", "col c", "col d"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writerow({"col a": col_a, "col b": col_b, "col c": col_c, "col d": col_d})
+        writer.writerow(
+            {"col a": col_a, "col b": col_b, "col c": col_c, "col d": col_d}
+        )
     if operation == "added":
         vault.content = os.listdir()
     return f"{account.name} had been {operation} to your Vault"
-    

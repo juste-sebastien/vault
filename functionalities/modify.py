@@ -6,6 +6,7 @@ import functionalities.add as funct_add
 
 import functionalities.consult as funct_consult
 
+
 def do_modifying(vault):
     prompt = "Which account do you want modify? "
     try:
@@ -18,12 +19,18 @@ def do_modifying(vault):
     parameter = get_parameter()
 
     if change_set(account, parameter):
-        text = {"account": account.name, "login": account.login, "pwd": account.pwd, "url": account.url}
+        text = {
+            "account": account.name,
+            "login": account.login,
+            "pwd": account.pwd,
+            "url": account.url,
+        }
         row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
         account.setting = row
         return funct_add.save_file(account, vault, "w", "modified")
     else:
         return "Sorry, we can't modifying your account"
+
 
 def get_parameter():
     try:
@@ -54,7 +61,3 @@ def change_set(account, parameter):
         return True
     else:
         return False
-
-    
-
-    
