@@ -29,7 +29,7 @@ Python 3.6+
 
 #### Installation
 ***
-Please read `requirements.txt` to get all libs using with this project and use the package manager [pip](https://pip.pypa.io/en/stable/) to install them.
+Please read [requirements.txt](https://github.com/juste-sebastien/vault/blob/master/requirements.txt) to get all libs using with this project and use the package manager [pip](https://pip.pypa.io/en/stable/) to install them.
 
 ```bash
 git clone https://github.com/juste-sebastien/vault
