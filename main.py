@@ -12,20 +12,25 @@ import functionalities.add as funct_add
 import functionalities.modify as funct_modify
 import functionalities.delete as funct_delete
 
+import gui.interface
+
+
 USAGE = str(
     "\n"
     + "consult -> for consulting a password in your Vault\n"
     + "generate -> for generating a new password\n"
     + "add -> for adding a new account(login + password) in to your Vault\n"
     + "modify -> for modifying an existing account\n"
-    + "list -> to see which accounts are saved in to your Vaul"
+    + "list -> to see which accounts are saved in to your Vault\n"
     + "CTRL + D or CTRL + C or quit -> to save your vault and quit program\n"
     + "usage -> when you don't know what to do"
 )
 
 WARNS = str(
     "\n"
-    + "You can type any password that you want to get an account set"
+    + "1. Please be sure to be in the same directory of your Vault zip file\n"
+    + "\n"
+    + "2. You can type any password that you want to get an account set"
     + "but if you can't read it clearly, it's because it's the wrong password.\n"
     + "Vault App don't permitted to recover password.\n"
     + "Keep it in safe place ;)"
@@ -33,26 +38,29 @@ WARNS = str(
 
 
 def main():
-    try:
-        vault = get_welcome()
-    except TypeError:
-        sys.exit("Thank's for using Vault App")
-
-    arch.undo_zip(vault)
-    vault.content = os.listdir()
-
-    while True:
+    if len(sys.argv) >=2 and sys.argv[1] in ["i", "interface"]:
+        gui.interface.run()
+    else:
         try:
-            choice = get_choice()
-            result = do_function(choice, vault)
-        except KeyboardInterrupt:
-            break
-        except (EOFError, TypeError):
-            break
-        else:
-            if result.isalnum:
-                print(result)
-    print(arch.save(vault))
+            vault = get_welcome()
+        except TypeError:
+            sys.exit("Thank's for using Vault App")
+
+        arch.undo_zip(vault)
+        vault.content = os.listdir()
+
+        while True:
+            try:
+                choice = get_choice()
+                result = do_function(choice, vault)
+            except KeyboardInterrupt:
+                break
+            except (EOFError, TypeError):
+                break
+            else:
+                if result.isalnum:
+                    print(result)
+        print(arch.save(vault))
 
 
 def get_welcome():
