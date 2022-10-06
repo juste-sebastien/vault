@@ -84,26 +84,69 @@
                 id: modify
                 text: "Modify"
                 on_press: root.get_screen(self.text)
-
-            Button:
-                id: delete
-                text: "Delete"
-                on_press: root.get_screen(self.text)
-
-            Button:
-                id: add
-                text: "Add"
-                on_press: root.get_screen(self.text)
-
             Button:
                 id: generate
                 text: "Generate"
                 on_press: root.get_screen(self.text)
-            
             Button:
                 id: logout
                 text: "Logout"
                 on_press: root.get_screen(self.text)
+
+
+<LogoutScreen>:
+    name: "logout"
+
+
+<ModifyScreen>:
+    name: "modify"
+    canvas.before:
+        Rectangle:
+            source: "./img/black_sofa.png"
+            size: root.width, root.height
+            pos: self.pos
+    GridLayout:
+        cols: 1
+        rows: 4
+        padding: "20dp"
+        Logo:
+        BoxLayout:
+            spacing: "20dp"
+            size_hint: 0.5, None
+            height: "60dp"
+            pos_hint: {"center_x": 0.5}
+            Button:
+                text: "Add"
+                on_press: root.do_canvas(self)
+            Button:
+                text: "Del"
+                on_press: root.do_canvas(self)
+            Button:
+                text: "Modif"
+                on_press: root.do_canvas(self)
+        Widget:
+        BoxLayout:
+            size_hint: 1, None
+            height: "40dp"
+            spacing: "5dp"
+            Button:
+                id: consult
+                text: "Consult"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: modify
+                text: "Modify"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: generate
+                text: "Generate"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: logout
+                text: "Logout"
+                on_press: root.get_screen(self.text)
+
+
 
 
 <GenerateScreen>:
@@ -140,7 +183,7 @@
                 size_hint: None, 1/3
                 width: "60dp"
                 active: True
-                on_active: root.add_to_list(self, self.active)
+                on_active: root.add_to_list(self)
             Label:
                 bold: True
                 color: 0.83, 0.69, 0.22
@@ -149,8 +192,8 @@
                 name: "digits"
                 size_hint: None, 1/3
                 width: "60dp"
-                active: True
-                on_active: root.add_to_list(self, self.active)
+                active: False
+                on_active: root.add_digits_to_list(self)
             Label:
                 bold: True
                 color: 0.83, 0.69, 0.22
@@ -159,8 +202,8 @@
                 name: "spec_char"
                 size_hint: None, 1/3
                 width: "60dp"
-                active: True
-                on_active: root.add_to_list(self, self.active)
+                active: False
+                on_active: root.add_spec_to_list(self)
             Label:
                 bold: True
                 color: 0.83, 0.69, 0.22
@@ -190,14 +233,6 @@
             Button:
                 id: modify
                 text: "Modify"
-                on_press: root.get_screen(self.text)
-            Button:
-                id: delete
-                text: "Delete"
-                on_press: root.get_screen(self.text)
-            Button:
-                id: add
-                text: "Add"
                 on_press: root.get_screen(self.text)
             Button:
                 id: generate

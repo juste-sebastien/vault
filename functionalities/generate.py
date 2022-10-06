@@ -2,6 +2,10 @@ import random
 import string
 
 
+SPEC_CHARS = ["!","\#", "$", "%", "&", "*", "+", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "\\", "."]
+ALPHABET = list(string.ascii_lowercase) + list(string.ascii_uppercase)
+DIGIT = list(string.digits)
+
 def generate(char_numb=0, char_list=[]):
     """
     Generate a random password from the ASCII table, including lower and uppercase,
@@ -23,7 +27,6 @@ def generate(char_numb=0, char_list=[]):
     i = 0
     while i < char_numb:
         char = random.randint(32, 127)
-        print(char)
         if not chr(char) in char_list:
             pass
         else:
@@ -45,9 +48,6 @@ def choose_pwd_length():
 def choose_special_chars():
     prompt = "What type of characters do you want?\n"+"a for alphabet\n"+"d for digits\n"+"s for specials characters\n"
     char_list = []
-    special_chars = ["!","\#", "$", "%", "&", "*", "+", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "\\", "."]
-    alphabet = list(string.ascii_lowercase) + list(string.ascii_uppercase)
-    digit = list(string.digits)
     try:
         chars_wanted = str(input(prompt))
     except:
@@ -55,11 +55,11 @@ def choose_special_chars():
         choose_special_chars()
     else:
         if "a" in chars_wanted:
-            char_list += alphabet
+            char_list += ALPHABET
         if "d" in chars_wanted:
-            char_list += digit
+            char_list += DIGIT
         if "s" in chars_wanted:
-            char_list += special_chars
+            char_list += SPEC_CHARS
     return char_list
 
 
