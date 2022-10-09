@@ -16,7 +16,9 @@ from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 
 
 VAULT = ""
@@ -76,53 +78,43 @@ class GenerateScreen(Screen):
 
 class ModifyScreen(Screen):
     """
-    def __init__(self, **kwargs):
-        self.init_layout()
-        super(ModifyScreen, self).__init__(**kwargs)
-        
+        def do_canvas(self, screen, widget, label):
+            if widget.active:
+                if "Add" in label.text:
+                    self.do_add_canvas(screen)
+                if "Del" in label.text:
+                    self.do_del_canvas(screen)
+                if "Modif" in label.text:
+                    self.do_change_canvas(screen)
 
-    def init_layout(self):
-        print("ok pour init layout")
-        layout = GridLayout(cols=1, rows= 4, padding=dp(20))
-        layout.add_widget(self.add_top_bar())
-
-    def add_top_bar(self):
-        print("ok pour top bar")
-        top_boxlayout = BoxLayout(spacing=dp(20), size_hint=(0.5, None), height=dp(60), pos_hint={"center_x": 0.5})
-        a_button = Button(text="Add")
-        top_boxlayout.add_widget(a_button)
-        d_button = Button(text="Del")
-        top_boxlayout.add_widget(d_button)
-        m_button = Button(text="Modif")
-        top_boxlayout.add_widget(m_button)
-        return top_boxlayout
     """
-
-
-    def do_canvas(self, widget):
-        if "Add" in widget.text:
-            self.do_add_canvas()
-        if "Del" in widget.text:
-            self.do_del_canvas()
-        if "Modif" in widget.text:
-            self.do_change_canvas()
-
     def get_screen(self, screen_name):
-        self.manager.transition.direction = "left"
-        self.manager.current = str(screen_name).lower()
-
-    def do_add_canvas(self):
-        print("add_canvas")
+        if "Logout" in screen_name:
+            #arch.save(VAULT)
+            self.manager.transition.direction = "left"
+            self.manager.current = "login"
+        elif screen_name in ["Add", "Del", "Modify"]:
+            self.manager.transition = NoTransition()
+            self.manager.current = str(screen_name).lower()
+        else:
+            self.manager.transition.direction = "left"
+            self.manager.current = str(screen_name).lower()
+"""
+    def do_add_canvas(self, screen):
         pass
 
-    def do_del_canvas(self):
-        print("del_canvas")
+    def do_del_canvas(self, screen):
+        print(f"del_canvas on {screen.name}")
+        for widget in self.walk():
+                print(type(widget), type(widget.ids))
         pass
 
-    def do_change_canvas(self):
-        print("change_canvas")
+    def do_change_canvas(self, screen):
+        print(f"change_canvas on {screen.name}")
+        for widget in self.walk():
+            print("{} -> {}".format(widget, widget.ids))
         pass
-
+"""
 
 class LogoutScreen(Screen):
     def get_screen(self, screen_name):
@@ -133,6 +125,48 @@ class LogoutScreen(Screen):
         else:
             self.manager.current = str(screen_name).lower()
     
+
+class AddScreen(Screen):
+    def get_screen(self, screen_name):
+        if "Logout" in screen_name:
+            #arch.save(VAULT)
+            self.manager.transition.direction = "left"
+            self.manager.current = "login"
+        elif screen_name in ["Add", "Del", "Modify"]:
+            self.manager.transition = NoTransition()
+            self.manager.current = str(screen_name).lower()
+        else:
+            self.manager.transition.direction = "left"
+            self.manager.current = str(screen_name).lower()
+
+
+class DelScreen(Screen):
+    def get_screen(self, screen_name):
+        if "Logout" in screen_name:
+            #arch.save(VAULT)
+            self.manager.transition.direction = "left"
+            self.manager.current = "login"
+        elif screen_name in ["Add", "Del", "Modify"]:
+            self.manager.transition = NoTransition()
+            self.manager.current = str(screen_name).lower()
+        else:
+            self.manager.transition.direction = "left"
+            self.manager.current = str(screen_name).lower()
+
+
+class UpdateScreen(Screen):
+    def get_screen(self, screen_name):
+        if "Logout" in screen_name:
+            #arch.save(VAULT)
+            self.manager.transition.direction = "left"
+            self.manager.current = "login"
+        elif screen_name in ["Add", "Del", "Modify"]:
+            self.manager.transition = NoTransition()
+            self.manager.current = str(screen_name).lower()
+        else:
+            self.manager.transition.direction = "left"
+            self.manager.current = str(screen_name).lower()
+
 
 class VaultApp(App):
     Config.set("graphics", "width", "400")
@@ -145,8 +179,9 @@ class VaultApp(App):
         sm.add_widget(GenerateScreen(name="generate"))
         sm.add_widget(ModifyScreen(name="modify"))
         sm.add_widget(LogoutScreen(name="logout"))
+        sm.add_widget(AddScreen(name="add"))
         return sm
-
+        
 
 def run():
     VaultApp().run()

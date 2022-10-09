@@ -94,10 +94,6 @@
                 on_press: root.get_screen(self.text)
 
 
-<LogoutScreen>:
-    name: "logout"
-
-
 <ModifyScreen>:
     name: "modify"
     canvas.before:
@@ -115,15 +111,27 @@
             size_hint: 0.5, None
             height: "60dp"
             pos_hint: {"center_x": 0.5}
-            Button:
+            Label:
+                id: add_label
                 text: "Add"
-                on_press: root.do_canvas(self)
-            Button:
+            CheckBox:
+                id: add_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(add_label.text)
+            Label:
+                id: del_label
                 text: "Del"
-                on_press: root.do_canvas(self)
-            Button:
-                text: "Modif"
-                on_press: root.do_canvas(self)
+            CheckBox:
+                id: del_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(del_label.text)
+            Label:
+                id: update_label
+                text: "Modify"
+            CheckBox:
+                id: update_input
+                group: "modify_vault"
+                on_active: root.get_screen(update_label.text)
         Widget:
         BoxLayout:
             size_hint: 1, None
@@ -147,7 +155,235 @@
                 on_press: root.get_screen(self.text)
 
 
+<AddScreen>:
+    name: "add"
+    canvas.before:
+        Rectangle:
+            source: "./img/black_sofa.png"
+            size: root.width, root.height
+            pos: self.pos
+    GridLayout:
+        cols: 1
+        rows: 4
+        padding: "20dp"
+        Logo:
+        BoxLayout:
+            spacing: "20dp"
+            size_hint: 0.5, None
+            height: "60dp"
+            pos_hint: {"center_x": 0.5}
+            Label:
+                id: add_label
+                text: "Add"
+            CheckBox:
+                id: add_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+            Label:
+                id: del_label
+                text: "Del"
+            CheckBox:
+                id: del_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+            Label:
+                id: update_label
+                text: "Update"
+            CheckBox:
+                id: update_input
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+        GridLayout:
+            cols: 1
+            size_hint: 0.8, 1
+            spacing: "5dp"
+            GridLayout:
+                cols: 2
+                Label:
+                    text: "Name"
+                TextInput:
+                Label:
+                    text: "Login"
+                TextInput:
+                Label:
+                    text: "Password"
+                TextInput:
+                Label:
+                    text: "Url"
+                TextInput:
+            Button:
+                text: "Add to my Vault"
+        BoxLayout:
+            size_hint: 1, None
+            height: "40dp"
+            spacing: "5dp"
+            Button:
+                id: consult
+                text: "Consult"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: modify
+                text: "Modify"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: generate
+                text: "Generate"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: logout
+                text: "Logout"
+                on_press: root.get_screen(self.text)
 
+
+<DelScreen>:
+    name: "del"
+    canvas.before:
+        Rectangle:
+            source: "./img/black_sofa.png"
+            size: root.width, root.height
+            pos: self.pos
+    GridLayout:
+        cols: 1
+        rows: 4
+        padding: "20dp"
+        Logo:
+        BoxLayout:
+            spacing: "20dp"
+            size_hint: 0.5, None
+            height: "60dp"
+            pos_hint: {"center_x": 0.5}
+            Label:
+                id: add_label
+                text: "Add"
+            CheckBox:
+                id: add_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+            Label:
+                id: del_label
+                text: "Del"
+            CheckBox:
+                id: del_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+            Label:
+                id: update_label
+                text: "Update"
+            CheckBox:
+                id: update_input
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+        GridLayout:
+            cols: 1
+            size_hint: 0.8, 1
+            spacing: "5dp"
+            GridLayout:
+                cols: 2
+                Label:
+                    text: "Name"
+                TextInput:
+            Button:
+                text: "Delete in my Vault"
+        BoxLayout:
+            size_hint: 1, None
+            height: "40dp"
+            spacing: "5dp"
+            Button:
+                id: consult
+                text: "Consult"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: modify
+                text: "Modify"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: generate
+                text: "Generate"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: logout
+                text: "Logout"
+                on_press: root.get_screen(self.text)
+
+
+<UpdateScreen>:
+    name: "update"
+    canvas.before:
+        Rectangle:
+            source: "./img/black_sofa.png"
+            size: root.width, root.height
+            pos: self.pos
+    GridLayout:
+        cols: 1
+        rows: 4
+        padding: "20dp"
+        Logo:
+        BoxLayout:
+            spacing: "20dp"
+            size_hint: 0.5, None
+            height: "60dp"
+            pos_hint: {"center_x": 0.5}
+            Label:
+                id: add_label
+                text: "Add"
+            CheckBox:
+                id: add_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+            Label:
+                id: del_label
+                text: "Del"
+            CheckBox:
+                id: del_radiobox
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+            Label:
+                id: update_label
+                text: "Update"
+            CheckBox:
+                id: update_input
+                group: "modify_vault"
+                on_active: root.get_screen(root.name)
+        GridLayout:
+            cols: 1
+            size_hint: 0.8, 1
+            spacing: "5dp"
+            GridLayout:
+                cols: 2
+                Label:
+                    text: "Name"
+                TextInput:
+                Label:
+                    text: "Login"
+                TextInput:
+                Label:
+                    text: "Password"
+                TextInput:
+                Label:
+                    text: "Url"
+                TextInput:
+            Button:
+                text: "Update in my Vault"
+        BoxLayout:
+            size_hint: 1, None
+            height: "40dp"
+            spacing: "5dp"
+            Button:
+                id: consult
+                text: "Consult"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: modify
+                text: "Modify"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: generate
+                text: "Generate"
+                on_press: root.get_screen(self.text)
+            Button:
+                id: logout
+                text: "Logout"
+                on_press: root.get_screen(self.text)
 
 <GenerateScreen>:
     name: "generate"
@@ -278,4 +514,3 @@
             size: self.size
             pos: self.pos
             radius: [10]
-
