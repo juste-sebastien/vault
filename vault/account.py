@@ -14,6 +14,7 @@ class Account:
         self.url = url
         self.file = f"{self.name}.csv"
         self.setting = {}
+        self.widgets = {"trash": "", "refresh": "", "button": ""}
 
     @property
     def name(self):
