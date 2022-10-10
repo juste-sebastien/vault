@@ -6,7 +6,7 @@ SPEC_CHARS = ["!","\#", "$", "%", "&", "*", "+", "-", ".", "/", ":", ";", "<", "
 ALPHABET = list(string.ascii_lowercase) + list(string.ascii_uppercase)
 DIGIT = list(string.digits)
 
-def generate(char_numb=0, char_list=[]):
+def generate(pwd_length=0, char_list=[]):
     """
     Generate a random password from the ASCII table, including lower and uppercase,
     numbers, and all specials characters excluded " ' ` and ,
@@ -20,12 +20,12 @@ def generate(char_numb=0, char_list=[]):
     pwd_created: str
         "pwd_created" is a random password created for the user
     """
-    if char_numb == 0 and char_list == []:
-        char_numb = choose_pwd_length()
+    if pwd_length == 0 and char_list == []:
+        pwd_length = choose_pwd_length()
         char_list = choose_special_chars()
     pwd_created = ""
     i = 0
-    while i < char_numb:
+    while i < pwd_length:
         char = random.randint(32, 127)
         if not chr(char) in char_list:
             pass
