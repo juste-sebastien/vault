@@ -2,46 +2,30 @@
 
 <LoginScreen>:
     name: "login"
+    radius: [25, 0, 0, 0]
     BoxLayout:
         orientation: "vertical"
         padding: "10dp", 0, "10dp", "15dp"
         spacing: "10dp"
-        canvas.before:
-            Rectangle:
-                source: "./img/black_sofa.png"
-                size: root.width, root.height
-                pos: self.pos
         Image:
             source: "./img/logo.png"
         Widget:
-        Label:
-            bold: True
-            color: 0.83, 0.69, 0.22
-            size_hint: None, None
-            height: "25dp"
-            width: "50dp"
-            pos_hint: {"x": 0.1}
-            text: "Login"
-        RoundedInput:
+        MDTextField:
             id: login
+            mode: "line"
+            hint_text: "Username"
+            icon_right: "account"
             color: 1, 0, 0, 1
             size_hint: 0.8, None
             multiline: False
             write_tab: False
-            focus: True
             height: "30dp"
             pos_hint: {"center_x": 0.5}
-        Label:
-            bold: True
-            color: 0.83, 0.69, 0.22
-            text: "Password"
-            size_hint: None, None
-            height: "25dp"
-            width: "75dp"
-            pos_hint: {"x": 0.1}
-
-        RoundedInput:
+        MDTextField:
             id: pwd
+            mode: "line"
+            icon_right: "eye-off"
+            hint_text: "Password"
             size_hint: 0.8, None
             multiline: False
             height: "30dp"
@@ -49,49 +33,56 @@
             password: True
             on_text_validate: root.on_click(login.text, pwd.text)
         Widget:
-        RoundedButton:
+        MDRoundFlatButton:
             text: "Connect"
             size_hint: 0.5, 0.5
             on_press: root.on_click(login.text, pwd.text)
+            pos_hint: {"center_x": 0.5}
+        MDRoundFlatButton:
+            text: "Clear"
+            size_hint: 0.35, 0.5
+            on_press: root.clear()
             pos_hint: {"center_x": 0.5}
 
 
 <WelcomeScreen>:
     name: "welcome"
-    canvas.before:
-        Rectangle:
-            source: "./img/black_sofa.png"
-            size: root.width, root.height
-            pos: self.pos
+    radius: [25, 0, 0, 0]
     GridLayout:
         cols: 1
         rows: 3
         padding: "20dp"
         Logo:
-        Label:
+        MDLabel:
             text_size: self.width, None
+            theme_text_color: "Custom"
+            text_color: 0.89, 0.61, 0.29, 1
             text: root.print_usages_warns()
+            halign: "justify"
         BoxLayout:
-            size_hint: 1, None
+            size_hint: root.width, None
             height: "40dp"
             spacing: "5dp"
-            Button:
+            MDRectangleFlatIconButton:
                 id: consult
                 text: "Consult"
-                on_press: root.get_screen(self.text)
-
-            Button:
+                icon: "archive-eye-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: modify
                 text: "Modify"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: generate
                 text: "Generate"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "shield-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: logout
                 text: "Logout"
-                on_press: root.get_screen(self.text)
+                icon: "logout"
+                on_press: app.change_screen(widget=self, screen=root)
 
 
 <ModifyScreen>:
@@ -111,48 +102,59 @@
             size_hint: 0.5, None
             height: "60dp"
             pos_hint: {"center_x": 0.5}
-            Label:
+            MDLabel:
                 id: add_label
+                theme_text_color: "Custom"
                 text: "Add"
             CheckBox:
                 id: add_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(add_label.text)
-            Label:
-                id: del_label
-                text: "Del"
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=add_label, screen=root)
+            MDLabel:
+                id: delete_label
+                theme_text_color: "Custom"
+                text: "Delete"
             CheckBox:
-                id: del_radiobox
+                id: "delele_radiobox"
                 group: "modify_vault"
-                on_active: root.get_screen(del_label.text)
-            Label:
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=delete_label, screen=root)
+            MDLabel:
                 id: update_label
-                text: "Modify"
+                theme_text_color: "Custom"
+                text: "Update"
             CheckBox:
-                id: update_input
+                id: update_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(update_label.text)
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=update_label, screen=root)
         Widget:
         BoxLayout:
             size_hint: 1, None
             height: "40dp"
             spacing: "5dp"
-            Button:
+            MDRectangleFlatIconButton:
                 id: consult
                 text: "Consult"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-eye-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+
+            MDRectangleFlatIconButton:
                 id: modify
                 text: "Modify"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: generate
                 text: "Generate"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "shield-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: logout
                 text: "Logout"
-                on_press: root.get_screen(self.text)
+                icon: "logout"
+                on_press: app.change_screen(widget=self, screen=root)
 
 
 <AddScreen>:
@@ -172,27 +174,33 @@
             size_hint: 0.5, None
             height: "60dp"
             pos_hint: {"center_x": 0.5}
-            Label:
+            MDLabel:
                 id: add_label
+                theme_text_color: "Custom"
                 text: "Add"
             CheckBox:
                 id: add_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
-            Label:
-                id: del_label
-                text: "Del"
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=add_label, screen=root)
+            MDLabel:
+                id: delete_label
+                theme_text_color: "Custom"
+                text: "Delete"
             CheckBox:
-                id: del_radiobox
+                id: "delele_radiobox"
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
-            Label:
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=delete_label, screen=root)
+            MDLabel:
                 id: update_label
+                theme_text_color: "Custom"
                 text: "Update"
             CheckBox:
-                id: update_input
+                id: update_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=update_label, screen=root)
         GridLayout:
             cols: 1
             size_hint: 0.8, 1
@@ -201,42 +209,47 @@
                 cols: 2
                 Label:
                     text: "Name"
-                TextInput:
+                MDTextField:
                 Label:
                     text: "Login"
-                TextInput:
+                MDTextField:
                 Label:
                     text: "Password"
-                TextInput:
+                MDTextField:
+                    password: True
                 Label:
                     text: "Url"
-                TextInput:
-            Button:
+                MDTextField:
+            MDRectangleFlatIconButton:
                 text: "Add to my Vault"
         BoxLayout:
             size_hint: 1, None
             height: "40dp"
             spacing: "5dp"
-            Button:
+            MDRectangleFlatIconButton:
                 id: consult
                 text: "Consult"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-eye-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+
+            MDRectangleFlatIconButton:
                 id: modify
                 text: "Modify"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: generate
                 text: "Generate"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "shield-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: logout
                 text: "Logout"
-                on_press: root.get_screen(self.text)
-
+                icon: "logout"
+                on_press: app.change_screen(widget=self, screen=root)
 
 <DelScreen>:
-    name: "del"
+    name: "delete"
     canvas.before:
         Rectangle:
             source: "./img/black_sofa.png"
@@ -252,27 +265,33 @@
             size_hint: 0.5, None
             height: "60dp"
             pos_hint: {"center_x": 0.5}
-            Label:
+            MDLabel:
                 id: add_label
+                theme_text_color: "Custom"
                 text: "Add"
             CheckBox:
                 id: add_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
-            Label:
-                id: del_label
-                text: "Del"
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=add_label, screen=root)
+            MDLabel:
+                id: delete_label
+                theme_text_color: "Custom"
+                text: "Delete"
             CheckBox:
-                id: del_radiobox
+                id: "delele_radiobox"
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
-            Label:
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=delete_label, screen=root)
+            MDLabel:
                 id: update_label
+                theme_text_color: "Custom"
                 text: "Update"
             CheckBox:
-                id: update_input
+                id: update_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=update_label, screen=root)
         GridLayout:
             cols: 1
             size_hint: 0.8, 1
@@ -281,29 +300,34 @@
                 cols: 2
                 Label:
                     text: "Name"
-                TextInput:
-            Button:
+                MDTextField:
+            MDRectangleFlatIconButton:
                 text: "Delete in my Vault"
         BoxLayout:
             size_hint: 1, None
             height: "40dp"
             spacing: "5dp"
-            Button:
+            MDRectangleFlatIconButton:
                 id: consult
                 text: "Consult"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-eye-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+
+            MDRectangleFlatIconButton:
                 id: modify
                 text: "Modify"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: generate
                 text: "Generate"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "shield-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: logout
+                icon: "logout"
                 text: "Logout"
-                on_press: root.get_screen(self.text)
+                on_press: app.change_screen(widget=self, screen=root)
 
 
 <UpdateScreen>:
@@ -323,27 +347,33 @@
             size_hint: 0.5, None
             height: "60dp"
             pos_hint: {"center_x": 0.5}
-            Label:
+            MDLabel:
                 id: add_label
+                theme_text_color: "Custom"
                 text: "Add"
             CheckBox:
                 id: add_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
-            Label:
-                id: del_label
-                text: "Del"
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=add_label, screen=root)
+            MDLabel:
+                id: delete_label
+                theme_text_color: "Custom"
+                text: "Delete"
             CheckBox:
-                id: del_radiobox
+                id: "delele_radiobox"
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
-            Label:
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=delete_label, screen=root)
+            MDLabel:
                 id: update_label
+                theme_text_color: "Custom"
                 text: "Update"
             CheckBox:
-                id: update_input
+                id: update_radiobox
                 group: "modify_vault"
-                on_active: root.get_screen(root.name)
+                color: 1, 1, 0, 1
+                on_active: app.change_screen(widget=update_label, screen=root)
         GridLayout:
             cols: 1
             size_hint: 0.8, 1
@@ -352,38 +382,44 @@
                 cols: 2
                 Label:
                     text: "Name"
-                TextInput:
+                MDTextField:
                 Label:
                     text: "Login"
-                TextInput:
+                MDTextField:
                 Label:
                     text: "Password"
-                TextInput:
+                MDTextField:
+                    password: True
                 Label:
                     text: "Url"
-                TextInput:
-            Button:
+                MDTextField:
+            MDRectangleFlatIconButton:
                 text: "Update in my Vault"
         BoxLayout:
             size_hint: 1, None
             height: "40dp"
             spacing: "5dp"
-            Button:
+            MDRectangleFlatIconButton:
                 id: consult
                 text: "Consult"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-eye-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+
+            MDRectangleFlatIconButton:
                 id: modify
                 text: "Modify"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: generate
                 text: "Generate"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "shield-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: logout
+                icon: "logout"
                 text: "Logout"
-                on_press: root.get_screen(self.text)
+                on_press: app.change_screen(widget=self, screen=root)
 
 <GenerateScreen>:
     name: "generate"
@@ -399,85 +435,90 @@
         Logo:
         BoxLayout:
             orientation: "vertical"
-            Label:
+            MDLabel:
                 bold: True
-                color: 0.83, 0.69, 0.22
+                theme_text_color: "Custom"
                 text: "Choose length:"
-            Slider:
+            MDSlider:
                 id: pwd_length
                 min: 0
                 max: 32
                 value: 8
-            Label:
-                bold: True
-                color: 0.83, 0.69, 0.22
-                text: str(int(pwd_length.value))
+                hint: True
         GridLayout:
             cols: 2
             CheckBox:
                 name: "alphabet"
                 size_hint: None, 1/3
+                color: 1, 1, 0, 1
                 width: "60dp"
                 active: True
                 on_active: root.add_to_list(self)
-            Label:
+            MDLabel:
                 bold: True
-                color: 0.83, 0.69, 0.22
+                theme_text_color: "Custom"
                 text: "include letters from a to z"
             CheckBox:
                 name: "digits"
                 size_hint: None, 1/3
+                color: 1, 1, 0, 1
                 width: "60dp"
                 active: False
                 on_active: root.add_digits_to_list(self)
-            Label:
+            MDLabel:
                 bold: True
-                color: 0.83, 0.69, 0.22
+                theme_text_color: "Custom"
                 text: "include digits from 0 to 9"
             CheckBox:
                 name: "spec_char"
                 size_hint: None, 1/3
+                color: 1, 1, 0, 1
                 width: "60dp"
                 active: False
                 on_active: root.add_spec_to_list(self)
-            Label:
+            MDLabel:
                 bold: True
-                color: 0.83, 0.69, 0.22
+                theme_text_color: "Custom"
                 text: "include !#$%&*+-./:;<=>?@\."
         BoxLayout:
             orientation: "vertical"
             spacing: "5dp"
             size_hint: 0.5, 0.5
-            Button:
+            MDRectangleFlatIconButton:
                 id: generate_button
                 text: "Generate"
                 on_press: root.do_generate(pwd_length)
                 size_hint: 0.5, 0.5
                 pos_hint: {"center_x": 0.5}
-            Label:
+            MDLabel:
                 bold: True
-                color: 0.83, 0.69, 0.22
+                theme_text_color: "Custom"
                 text: root.pwd
         BoxLayout:
             size_hint: 1, None
             height: "40dp"
             spacing: "5dp"
-            Button:
+            MDRectangleFlatIconButton:
                 id: consult
                 text: "Consult"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-eye-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+
+            MDRectangleFlatIconButton:
                 id: modify
                 text: "Modify"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "archive-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: generate
                 text: "Generate"
-                on_press: root.get_screen(self.text)
-            Button:
+                icon: "shield-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
                 id: logout
+                icon: "logout"
                 text: "Logout"
-                on_press: root.get_screen(self.text)
+                on_press: app.change_screen(widget=self, screen=root)
 
 
 <Logo@BoxLayout>:
@@ -487,30 +528,20 @@
         source: "./img/logo.png"
         keep_ratio: True
 
-
-<RoundedButton@Button>:
-    background_color: (0,0,0,0)
-    background_normal: ""
-    canvas.before:
-        Color:
-            rgba: (0, 17/255, 17/255, 0.8)
-        RoundedRectangle:
-            size: self.size
-            pos: self.pos
-            radius: [30]
-
-
-<RoundedInput@TextInput>:
-    background_color: (0,0,0,0)
-    background_normal: ""
-    font_color: (1,1,1)
-    canvas.before:
-        Color:
-            rgba: (0/255, 0/255, 0/255, 1)
-    canvas.after:
-        Color:
-            rgba: (1,1,1, 0.02)
-        RoundedRectangle:
-            size: self.size
-            pos: self.pos
-            radius: [10]
+<NavBar@MDBottomNavigation>:
+    MDBottomNavigationItem:
+        name: "consult"
+        text: "Consult"
+        icon: "archive-eye-outline"
+    MDBottomNavigationItem:
+        name: "modify"
+        text: "Modify"
+        icon: "archive-cog-outline"
+    MDBottomNavigationItem:
+        name: "generate"
+        text: "Generate"
+        icon: "shield-edit-outline"
+    MDBottomNavigationItem:
+        name: "logout"
+        text: "Logout"
+        icon: "logout"
