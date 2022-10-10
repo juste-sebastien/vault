@@ -1,13 +1,16 @@
+from cgitb import text
 import main
 
+from vault.account import Account
 from vault.vault import Vault
 import vault.zip as arch
 
+import functionalities.delete as func_del
 import functionalities.generate as func_gen
 
 from kivy.core.window import Window
 
-from kivy.metrics import dp
+from kivy.metrics import dp, sp
 
 from kivy.properties import StringProperty
 
@@ -20,10 +23,11 @@ from kivy.uix.screenmanager import ScreenManager, NoTransition
 
 from kivymd.app import MDApp
 
+from kivymd.uix.button import MDIconButton, MDRectangleFlatButton
 from kivymd.uix.screen import MDScreen
 
 
-VAULT = ""
+VAULT = Vault("try", "try")
 
 class LoginScreen(MDScreen):
     def on_click(self, login, pwd):
@@ -40,6 +44,55 @@ class LoginScreen(MDScreen):
 class WelcomeScreen(MDScreen):
     def print_usages_warns(self):
         return f"{main.WARNS}\n{main.USAGE}"
+
+
+class ConsultScreen(MDScreen):
+    def __init__(self, **kwargs):
+        self.account_list =  {}
+        self.test_list = ["test.csv", "test2.csv", "test3.csv"]
+        super(ConsultScreen, self).__init__(**kwargs)
+
+    def get_list_account(self):
+        main_grid = self.ids.consult_grid
+        main_grid.clear_widgets()
+        for file in self.test_list:
+            text_button = file.strip(".csv")
+            account = Account("text_button", "test", "test", "test.com")
+            account_button = MDRectangleFlatButton(id=text_button,text=text_button, font_size=sp(12), padding=(0, 0, dp(5),0), size_hint=(0.8, 0.8), pos_hint={"center_x": 0, "center_y": 0.5})
+            trash_id = text_button + "_trash"
+            trash_icon = MDIconButton(id=trash_id, icon="delete-outline", padding=(0, 0, dp(5),0), size_hint=(0.10, 0.8), pos_hint={"center_x": 0.5, "center_y": 0.5})
+            trash_icon.bind(on_press=self.remove)
+            refresh_id = text_button + "_refresh"
+            refresh_icon = MDIconButton(id=refresh_id, icon="refresh", padding=(0, 0, dp(5),0), size_hint=(0.10, 0.8), pos_hint={"center_x": 0.5, "center_y": 0.5})
+            refresh_icon.bind(on_press=self.refresh)
+            main_grid.add_widget(trash_icon)
+            main_grid.add_widget(refresh_icon)
+            main_grid.add_widget(account_button)
+            account.widgets["trash"] = trash_icon
+            account.widgets["refresh"] = refresh_icon
+            account.widgets["button"] = account_button
+            self.account_list[text_button] = account
+            print(self.account_list)
+
+
+    def remove(self, instance):
+        account_name, icon = str(instance.id).split("_")
+        if account_name in self.account_list.keys():
+            current_account = self.account_list[account_name]
+            trash = current_account.widgets.get("trash")
+            self.ids.consult_grid.remove_widget(trash)
+            refresh = current_account.widgets.get("refresh")
+            self.ids.consult_grid.remove_widget(refresh)
+            acnt_button = current_account.widgets.get("button")
+            self.ids.consult_grid.remove_widget(acnt_button)
+            filename = account_name + ".csv"
+            #func_del.remove_file(file=filename, vault=VAULT)
+            self.account_list.pop(account_name)
+            #VAULT.content.pop(filename)
+            self.test_list.pop(self.test_list.index(filename))
+
+    def refresh(self, instance):
+        pass
 
 
 class GenerateScreen(MDScreen):
@@ -100,6 +153,7 @@ class VaultApp(MDApp):
         sm.add_widget(AddScreen(name="add"))
         sm.add_widget(DelScreen(name="delete"))
         sm.add_widget(UpdateScreen(name="update"))
+        sm.add_widget(ConsultScreen(name="consult"))
         return sm
 
     def change_screen(self, **kwargs):

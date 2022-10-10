@@ -85,6 +85,53 @@
                 on_press: app.change_screen(widget=self, screen=root)
 
 
+<ConsultScreen>:
+    name: "consult"
+    on_pre_enter: self.get_list_account()
+    canvas.before:
+        Rectangle:
+            source: "./img/black_sofa.png"
+            size: root.width, root.height
+            pos: self.pos
+    GridLayout:
+        cols: 1
+        padding: "20dp"
+        Logo:
+        ScrollView:
+            GridLayout:
+                cols: 3
+                id: consult_grid
+                padding: "2dp", "8dp"
+                row_force_default: True
+                row_default_height: "30dp"
+        Widget:
+        BoxLayout:
+            size_hint: 1, None
+            height: "40dp"
+            spacing: "5dp"
+            MDRectangleFlatIconButton:
+                id: consult
+                text: "Consult"
+                icon: "archive-eye-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+
+            MDRectangleFlatIconButton:
+                id: modify
+                text: "Modify"
+                icon: "archive-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
+                id: generate
+                text: "Generate"
+                icon: "shield-edit-outline"
+                on_press: app.change_screen(widget=self, screen=root)
+            MDRectangleFlatIconButton:
+                id: logout
+                text: "Logout"
+                icon: "logout"
+                on_press: app.change_screen(widget=self, screen=root)
+
+
 <ModifyScreen>:
     name: "modify"
     canvas.before:
