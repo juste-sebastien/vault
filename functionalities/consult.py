@@ -66,8 +66,12 @@ def search(mode, vault, prompt):
 
     research = research.lower().strip()
     account_file = research + ".csv"
-    if account_file in vault.content:
-        with open(account_file, mode) as f:
+    return get_account(account_file, vault, mode)
+
+
+def get_account(file, vault, mode):
+    if file in vault.content:
+        with open(file, mode) as f:
             data = crypt.get_decrypt_data(vault, f)
             print(data)
             name = data["ciphertext"]["account"]
