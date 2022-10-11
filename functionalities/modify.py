@@ -19,17 +19,21 @@ def do_modifying(vault):
     parameter = get_parameter()
 
     if change_set(account, parameter):
-        text = {
+        return do_modifying_interface(vault, account)
+    else:
+        return "Sorry, we can't modifying your account"
+
+
+def do_modifying_interface(vault, account):
+    text = {
             "account": account.name,
             "login": account.login,
             "pwd": account.pwd,
             "url": account.url,
         }
-        row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
-        account.setting = row
-        return funct_add.save_file(account, vault, "w", "modified")
-    else:
-        return "Sorry, we can't modifying your account"
+    row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
+    account.setting = row
+    return funct_add.save_file(account, vault, "w", "modified")
 
 
 def get_parameter():
