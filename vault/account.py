@@ -15,6 +15,7 @@ class Account:
         self.file = f"{self.name}.csv"
         self.setting = {}
         self.widgets = {"trash": "", "refresh": "", "button": ""}
+        self.txt_widgets = {"name": "", "login": "", "pwd": "", "url": ""}
 
     @property
     def name(self):
