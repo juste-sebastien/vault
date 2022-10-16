@@ -73,7 +73,6 @@ def get_account(file, vault, mode):
     if file in vault.content:
         with open(file, mode) as f:
             data = crypt.get_decrypt_data(vault, f)
-            print(data)
             name = data["ciphertext"]["account"]
             login = data["ciphertext"]["login"]
             password = data["ciphertext"]["pwd"]
