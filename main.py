@@ -38,7 +38,7 @@ WARNS = str(
 
 
 def main():
-    if len(sys.argv) >=2 and sys.argv[1] in ["i", "interface"]:
+    if len(sys.argv) >= 2 and sys.argv[1] in ["i", "interface"]:
         gui.interface.run()
     else:
         try:
@@ -58,8 +58,9 @@ def main():
             except (EOFError, TypeError):
                 break
             else:
-                if result.isalnum:
+                if type(result) == str:
                     print(result)
+
         print(arch.save(vault))
 
 
