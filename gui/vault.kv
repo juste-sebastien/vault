@@ -1,12 +1,5 @@
 #:kivy 2.1.0
 
-<AppScreenManager>:
-    id: app_screen_manager
-    ConsultScreen:
-    AddScreen:
-    GenerateScreen:
-
-
 <LoginScreen>:
     name: "login"
     radius: [25, 0, 0, 0]
@@ -28,279 +21,79 @@
             write_tab: False
             height: "30dp"
             pos_hint: {"center_x": 0.5}
-        MDTextField:
+            mode: "rectangle"
+        ClickableTextFieldRound:
             id: pwd
-            mode: "line"
-            icon_right: "eye-off"
-            hint_text: "Password"
             size_hint: 0.8, None
             multiline: False
             height: "30dp"
             pos_hint: {"center_x": 0.5, "top": 1}
-            password: True
-            on_text_validate: root.on_click(login.text, pwd.text)
+
         Widget:
-        MDRoundFlatButton:
+        MDFillRoundFlatButton:
             text: "Connect"
             size_hint: 0.5, 0.5
-            on_press: root.on_click(login.text, pwd.text)
+            on_press: root.on_click(login, pwd)
             pos_hint: {"center_x": 0.5}
-        MDRoundFlatButton:
+        MDFillRoundFlatButton:
             text: "Clear"
             size_hint: 0.35, 0.5
             on_press: root.clear()
             pos_hint: {"center_x": 0.5}
 
 
-<WelcomeScreen>:
-    name: "welcome"
-    radius: [25, 0, 0, 0]
-    GridLayout:
-        cols: 1
-        rows: 3
-        padding: "20dp"
-        Logo:
-        MDLabel:
-            text_size: self.width, None
-            theme_text_color: "Custom"
-            text_color: 0.89, 0.61, 0.29, 1
-            text: root.print_usages_warns()
-            halign: "justify"
-        BoxLayout:
-            size_hint: root.width, None
-            height: "40dp"
-            spacing: "5dp"
-            MDRectangleFlatIconButton:
-                id: consult
-                text: "Consult"
-                icon: "archive-eye-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: add
-                text: "Add"
-                icon: "archive-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: generate
-                text: "Generate"
-                icon: "shield-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: logout
-                text: "Logout"
-                icon: "logout"
-                on_press: app.change_screen(widget=self, screen=root)
-
-
-<ConsultScreen>:
-    name: "consult"
-    on_pre_enter: self.get_list_account()
-    canvas.before:
-        Rectangle:
-            source: "./img/black_sofa.png"
-            size: root.width, root.height
-            pos: self.pos
-    GridLayout:
-        cols: 1
-        padding: "20dp"
-        Logo:
+<AccountScreen>:
+    name: "account"
+    MDTopAppBar:
+        left_action_items: [["arrow-left", lambda x: root.change_screen(x, root), "Go back to your Vault"]]
+    MDBoxLayout:
         GridLayout:
             cols: 1
-            id:consult_grid
-        BoxLayout:
-            size_hint: 1, None
-            height: "40dp"
-            spacing: "5dp"
-            id: navbar
-            MDRectangleFlatIconButton:
-                id: consult
-                text: "Consult"
-                icon: "archive-eye-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-
-            MDRectangleFlatIconButton:
-                id: add
-                text: "Add"
-                icon: "archive-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: generate
-                text: "Generate"
-                icon: "shield-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: logout
-                text: "Logout"
-                icon: "logout"
-                on_press: app.change_screen(widget=self, screen=root)
-
-
-<AddScreen>:
-    name: "add"
-    canvas.before:
-        Rectangle:
-            source: "./img/black_sofa.png"
-            size: root.width, root.height
-            pos: self.pos
-    GridLayout:
-        cols: 1
-        rows: 5
-        padding: "20dp"
-        Logo:
-            pos_hint: {"center_x": dp(20), "center_y": root.height - dp(20)}
-        GridLayout:
-            cols: 1
+            padding: dp(20)
+            spacing: dp(10)
             MDTextField:
-                hint_text: "Name"
+                id: account_name_field
+                hint_text: "Account Name"
                 require: True
                 size_hint: 1, None
                 height: dp(40)
             MDTextField:
+                id: login_field
                 hint_text: "Login"
                 require: True
                 size_hint: 1, None
                 height: dp(40)
-            MDTextField:
+            ClickableTextFieldLine:
+                id: pwd_field
                 hint_text: "Password"
                 require: True
                 password: True
                 size_hint: 1, None
                 height: dp(40)
             MDTextField:
-                hint_text: "Url"
+                id: url_field
+                hint_text: "URL"
                 size_hint: 1, None
                 height: dp(40)
-            MDRectangleFlatIconButton:
-                text: "Add to my Vault"
+            MDFillRoundFlatIconButton:
+                text: "Delete from my Vault"
+                icon: "delete-outline"
                 size_hint: 0.2, None
                 height: dp(40)
                 pos_hint: {"center_x": 0.5}
-            Widget:
-        BoxLayout:
-            size_hint: 1, None
-            height: "40dp"
-            spacing: "5dp"
-            MDRectangleFlatIconButton:
-                id: consult
-                text: "Consult"
-                icon: "archive-eye-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-
-            MDRectangleFlatIconButton:
-                id: add
-                text: "Add"
-                icon: "archive-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: generate
-                text: "Generate"
-                icon: "shield-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: logout
-                icon: "logout"
-                text: "Logout"
-                on_press: app.change_screen(widget=self, screen=root)
-
-<GenerateScreen>:
-    name: "generate"
-    canvas.before:
-        Rectangle:
-            source: "./img/black_sofa.png"
-            size: root.width, root.height
-            pos: self.pos
-    GridLayout:
-        cols: 1
-        rows: 5
-        padding: "20dp"
-        Logo:
-            pos_hint: {"center_x": dp(20), "center_y": root.height - dp(20)}
-        BoxLayout:
-            orientation: "vertical"
-            MDLabel:
-                bold: True
-                theme_text_color: "Custom"
-                text: "Choose length:"
-            MDSlider:
-                id: pwd_length
-                min: 8
-                max: 32
-                value: 12
-                hint: True
-        GridLayout:
-            cols: 2
-            CheckBox:
-                name: "alphabet"
-                size_hint: None, 1/3
-                color: 1, 1, 0, 1
-                width: "60dp"
-                active: True
-                on_active: root.add_to_list(self)
-            MDLabel:
-                bold: True
-                theme_text_color: "Custom"
-                text: "include letters from a to z"
-            CheckBox:
-                name: "digits"
-                size_hint: None, 1/3
-                color: 1, 1, 0, 1
-                width: "60dp"
-                active: False
-                on_active: root.add_digits_to_list(self)
-            MDLabel:
-                bold: True
-                theme_text_color: "Custom"
-                text: "include digits from 0 to 9"
-            CheckBox:
-                name: "spec_char"
-                size_hint: None, 1/3
-                color: 1, 1, 0, 1
-                width: "60dp"
-                active: False
-                on_active: root.add_spec_to_list(self)
-            MDLabel:
-                bold: True
-                theme_text_color: "Custom"
-                text: "include !#$%&*+-./:;<=>?@\."
-        BoxLayout:
-            orientation: "vertical"
-            spacing: "5dp"
-            size_hint: 0.5, 0.5
-            MDRectangleFlatIconButton:
-                id: generate_button
-                text: "Generate"
-                on_press: root.do_generate(pwd_length)
-                size_hint: 0.5, 0.5
+                on_press: root.remove()
+            MDFillRoundFlatIconButton:
+                text: "Modify in my Vault"
+                icon: "refresh"
+                size_hint: 0.2, None
+                height: dp(40)
                 pos_hint: {"center_x": 0.5}
+                on_press: root.refresh()
             MDLabel:
-                bold: True
-                theme_text_color: "Custom"
-                text: root.pwd
-        BoxLayout:
-            size_hint: 1, None
-            height: "40dp"
-            spacing: "5dp"
-            MDRectangleFlatIconButton:
-                id: consult
-                text: "Consult"
-                icon: "archive-eye-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-
-            MDRectangleFlatIconButton:
-                id: add
-                text: "Add"
-                icon: "archive-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: generate
-                text: "Generate"
-                icon: "shield-edit-outline"
-                on_press: app.change_screen(widget=self, screen=root)
-            MDRectangleFlatIconButton:
-                id: logout
-                icon: "logout"
-                text: "Logout"
-                on_press: app.change_screen(widget=self, screen=root)
+                id: consult_label
+                halign: "center"
+                pos_hint: {"center_x": 0.5}
+        
 
 
 <Logo@BoxLayout>:
@@ -314,162 +107,44 @@
 
 
 <AppScreen>:
-
+    on_enter: root.generate_consult()
     MDBottomNavigation:
-        #panel_color: "#eeeaea"
-        selected_color_background: "orange"
-        text_color_active: "lightgrey"
-
+        panel_color: "teal"
+        text_color_active: app.theme_cls.primary_light
+        text_color_normal: "#0d0d0d"
+        id: bottom_navbar
 
         MDBottomNavigationItem:
             name: 'consult'
             text: 'Consult'
             icon: 'archive-eye-outline'
-            BoxLayout:
-                size_hint: 1, None
-                height: root.height / 10
+            GridLayout:
+                cols: 1
                 padding: dp(20)
-                pos_hint: {"center_x": 0.5, "center_y": 0.9}
-                MDIconButton:
-                    icon: "magnify"
-                    pos_hint: {"center_x": self.width / 3, "center_y": 0.5}
-                    on_press: root.search(research.text)
-                MDTextField:
-                    id: research
-                    hint_text: "Research"
-                    helper_text: "Type the name of the account"
-            Carousel:
-                id: carousel_card
-                MD3Card:
-                    orientation: "vertical"
-                    line_color: (0.2, 0.2, 0.2, 0.8)
-                    style: "elevated"
-                    padding: dp(4)
-                    size_hint: (0.6, 0.6)
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                    GridLayout:
-                        cols: 1
-                        MDRelativeLayout:
-                            md_bg_color: 0.3, 0.3, 0.3, 1
-                            size_hint: 1, 0.33
-                            MDLabel:
-                                id: card_name
-                                text: root.card_name
-                                font_size: sp(20)
-                                #padding: (0, dp(5))
-
-                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                                halign: "center"
-                        MDGridLayout:
-                            id: card_core
-                            cols: 2
-                            row_force_default: True
-                            row_default_height: dp(40)
-                            padding: (dp(10), 0)
-                            MDLabel:
-                                text: "Login"
-                            MDLabel:
-                                id: card_login_label
-                                text: root.card_login
-                            MDLabel:
-                                text: "Password"
-                            BoxLayout:
-                                MDLabel:
-                                    id: card_pwd_label
-                                    text: root.card_pwd
-                                MDIconButton:
-                                    id: card_pwd_button
-                                    icon: "eye-off-outline"
-                                    icon_size: sp(16)
-                                    pos_hint: {"center_x": 0.9,"center_y": 0.5}
-                                    on_press: root.reveale_pwd(card_pwd_label, card_pwd_button)
-                            MDLabel:
-                                text: "Url"
-                                size_hint: 1, None
-                                height: dp(40)
-                        MDLabel:
-                            text: root.card_url
-                            valign: "top"
-                        Widget:
-
-                    MDRelativeLayout:
-                        size_hint: 1, None
-                        height: dp(50)
-                        MDIconButton:
-                            id: trash_id
-                            icon: "delete-outline"
-                            on_press: root.remove()
-                            pos_hint: {"center_x": 0.33}
-                        MDIconButton:
-                            id: refresh_id
-                            icon: "refresh"
-                            on_press: root.refresh()
-                            pos_hint: {"center_x": 0.66}
-                MD3Card:
-                    orientation: "vertical"
-                    line_color: (0.2, 0.2, 0.2, 0.8)
-                    style: "elevated"
-                    padding: dp(4)
-                    size_hint: (0.6, 0.6)
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                    GridLayout:
-                        cols: 1
-                        MDRelativeLayout:
-                            md_bg_color: 0.3, 0.3, 0.3, 1
-                            size_hint: 1, 0.33
-                            MDLabel:
-                                id: card_name
-                                text: root.card_name
-                                font_size: sp(20)
-                                #padding: (0, dp(5))
-
-                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                                halign: "center"
-                        MDGridLayout:
-                            id: card_core
-                            cols: 2
-                            row_force_default: True
-                            row_default_height: dp(40)
-                            padding: (dp(10), 0)
-                            MDLabel:
-                                text: "Login"
-                            MDLabel:
-                                id: card_login_label
-                                text: root.card_login
-                            MDLabel:
-                                text: "Password"
-                            BoxLayout:
-                                MDLabel:
-                                    id: card_pwd_label
-                                    text: root.card_pwd
-                                MDIconButton:
-                                    id: card_pwd_button
-                                    icon: "eye-off-outline"
-                                    icon_size: sp(16)
-                                    pos_hint: {"center_x": 0.9,"center_y": 0.5}
-                                    on_press: root.reveale_pwd(card_pwd_label, card_pwd_button)
-                            MDLabel:
-                                text: "Url"
-                                size_hint: 1, None
-                                height: dp(40)
-                        MDLabel:
-                            text: root.card_url
-                            valign: "top"
-                        Widget:
-
-                    MDRelativeLayout:
-                        size_hint: 1, None
-                        height: dp(50)
-                        MDIconButton:
-                            id: trash_id
-                            icon: "delete-outline"
-                            on_press: root.remove()
-                            pos_hint: {"center_x": 0.33}
-                        MDIconButton:
-                            id: refresh_id
-                            icon: "refresh"
-                            on_press: root.refresh()
-                            pos_hint: {"center_x": 0.66}
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                id: research_box
+                BoxLayout:
+                    size_hint: 1, None
+                    height: root.height / 10
+                    MDIconButton:
+                        icon: "magnify"
+                        pos_hint: {"center_x": self.width / 3, "center_y": 0.5}
+                        on_press: root.search(research)
+                    MDTextField:
+                        id: research
+                        hint_text: "Research"
+                        helper_text: "Type the name of the account"
+                MDLabel:
+                    id: research_label
+                    size_hint: 1, None
+                    halign: "center"
+                    valign: "center"
+                    height: dp(20)
+                    font_size: sp(10)
+                Carousel:
+                    id: carousel_card
+                    size_hint: 1, 0.8
+                    pos_hint: {"center_x": 0.5}
 
 
         MDBottomNavigationItem:
@@ -480,7 +155,7 @@
                 cols: 1
                 padding: dp(20)
                 MDTextField:
-                    hint_text: "Name"
+                    hint_text: "Account Name"
                     require: True
                     size_hint: 1, None
                     height: dp(40)
@@ -499,8 +174,9 @@
                     hint_text: "Url"
                     size_hint: 1, None
                     height: dp(40)
-                MDRectangleFlatIconButton:
+                MDFillRoundFlatIconButton:
                     text: "Add to my Vault"
+                    icon: 'archive-edit-outline'
                     size_hint: 0.2, None
                     height: dp(40)
                     pos_hint: {"center_x": 0.5}
@@ -510,76 +186,83 @@
             name: 'generate'
             text: 'Generate'
             icon: 'shield-edit-outline'
-            BoxLayout:
-                orientation: "vertical"
-                padding: dp(20)
+            GridLayout:
+                cols: 1
                 BoxLayout:
                     orientation: "vertical"
-                    size_hint: 1, None
-                    height: dp(60)
-                    MDLabel:
-                        bold: True
-                        theme_text_color: "Custom"
-                        text: "Choose length:"
-                    MDSlider:
-                        id: pwd_length
-                        min: 8
-                        max: 32
-                        value: 12
-                        hint: True
-                GridLayout:
-                    cols: 2
-                    row_force_default: True
-                    row_default_height: dp(40)
                     padding: dp(20)
-                    CheckBox:
-                        name: "alphabet"
-                        size_hint: None, 1/3
-                        color: 1, 1, 0, 1
-                        width: "60dp"
-                        active: True
-                        on_active: root.add_to_list(self)
-                    MDLabel:
-                        bold: True
-                        theme_text_color: "Custom"
-                        text: "include letters from a to z"
-                    CheckBox:
-                        name: "digits"
-                        size_hint: None, 1/3
-                        color: 1, 1, 0, 1
-                        width: "60dp"
-                        active: False
-                        on_active: root.add_digits_to_list(self)
-                    MDLabel:
-                        bold: True
-                        theme_text_color: "Custom"
-                        text: "include digits from 0 to 9"
-                    CheckBox:
-                        name: "spec_char"
-                        size_hint: None, 1/3
-                        color: 1, 1, 0, 1
-                        width: "60dp"
-                        active: False
-                        on_active: root.add_spec_to_list(self)
-                    MDLabel:
-                        bold: True
-                        theme_text_color: "Custom"
-                        text: "include !#$%&*+-./:;<=>?@\."
-                BoxLayout:
-                    orientation: "vertical"
-                    spacing: dp(5)
-                    MDRectangleFlatIconButton:
-                        id: generate_button
-                        text: "Generate"
-                        on_press: root.do_generate(pwd_length)
-                        size_hint: 0.5, 0.3
-                        pos_hint: {"center_x": 0.5}
-                    MDLabel:
-                        bold: True
-                        theme_text_color: "Custom"
-                        text: root.pwd
-                        halign: "center"
-                        font_size: sp(20)
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint: 1, None
+                        height: dp(100)
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "Choose length:"
+                            
+                        MDSlider:
+                            id: pwd_length
+                            min: 8
+                            max: 32
+                            value: 12
+                            hint: True
+                    GridLayout:
+                        cols: 2
+                        row_force_default: True
+                        row_default_height: dp(40)
+                        padding: dp(20)
+                        spacing: dp(20)
+                        MDSwitch:
+                            name: "alphabet"
+                            size_hint: None, 1/3
+                            color: 0.29, 0.64, 0.95, 1
+                            width: dp(40)
+                            active: True
+                            disabled: True
+                            disabled_color: "Teal"
+                            icon_active: "check"
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "include letters from a to z"
+                        MDSwitch:
+                            name: "digits"
+                            size_hint: None, 1/3
+                            color: 0.29, 0.64, 0.95, 1
+                            width: dp(40)
+                            active: False
+                            on_active: root.add_digits_to_list(self)
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "include digits from 0 to 9"
+                        MDSwitch:
+                            name: "spec_char"
+                            size_hint: None, 1/3
+                            color: 0.29, 0.64, 0.95, 1
+                            width: dp(40)
+                            active: False
+                            on_active: root.add_spec_to_list(self)
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "include !#$%&*+-./:;<=>?@\."
+                    BoxLayout:
+                        orientation: "vertical"
+                        spacing: dp(5)
+                        MDFillRoundFlatIconButton:
+                            id: generate_button
+                            text: "Generate"
+                            icon: 'shield-edit-outline'
+                            on_press: root.do_generate(pwd_length)
+                            size_hint: 0.5, 0.3
+                            pos_hint: {"center_x": 0.5}
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: root.pwd
+                            halign: "center"
+                            font_size: sp(20)
 
 
         MDBottomNavigationItem:
@@ -588,3 +271,45 @@
             icon: 'logout'
             on_tab_press: root.save()
             id: logout_item
+
+
+<ClickableTextFieldRound>:
+    size_hint_y: None
+    height: pwd_text_field.height
+
+    MDTextField:
+        id: pwd_text_field
+        hint_text: root.hint_text
+        text: root.text
+        password: True
+        require: True
+        mode: "rectangle"
+
+    MDIconButton:
+        icon: "eye-off"
+        pos_hint: {"center_y": .5}
+        pos: pwd_text_field.width - self.width + dp(8), 0
+        theme_text_color: "Hint"
+        on_release:
+            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+            pwd_text_field.password = False if pwd_text_field.password is True else True
+
+<ClickableTextFieldLine>:
+    size_hint_y: None
+    height: text_field.height
+
+    MDTextField:
+        id: text_field
+        hint_text: root.hint_text
+        text: root.text
+        password: True
+        require: True
+
+    MDIconButton:
+        icon: "eye-off"
+        pos_hint: {"center_y": .5}
+        pos: text_field.width - self.width + dp(8), 0
+        theme_text_color: "Hint"
+        on_release:
+            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+            text_field.password = False if text_field.password is True else True
