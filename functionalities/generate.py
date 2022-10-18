@@ -2,9 +2,30 @@ import random
 import string
 
 
-SPEC_CHARS = ["!","\#", "$", "%", "&", "*", "+", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "\\", "."]
+SPEC_CHARS = [
+    "!",
+    "\#",
+    "$",
+    "%",
+    "&",
+    "*",
+    "+",
+    "-",
+    ".",
+    "/",
+    ":",
+    ";",
+    "<",
+    "=",
+    ">",
+    "?",
+    "@",
+    "\\",
+    ".",
+]
 ALPHABET = list(string.ascii_lowercase) + list(string.ascii_uppercase)
 DIGIT = list(string.digits)
+
 
 def generate(pwd_length=0, char_list=[]):
     """
@@ -46,7 +67,12 @@ def choose_pwd_length():
 
 
 def choose_special_chars():
-    prompt = "What type of characters do you want?\n"+"a for alphabet\n"+"d for digits\n"+"s for specials characters\n"
+    prompt = (
+        "What type of characters do you want?\n"
+        + "a for alphabet\n"
+        + "d for digits\n"
+        + "s for specials characters\n"
+    )
     char_list = []
     try:
         chars_wanted = str(input(prompt))
@@ -61,5 +87,3 @@ def choose_special_chars():
         if "s" in chars_wanted:
             char_list += SPEC_CHARS
     return char_list
-
-

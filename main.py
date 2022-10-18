@@ -47,7 +47,6 @@ def main():
             sys.exit("Thank's for using Vault App")
 
         arch.undo_zip(vault)
-        vault.content = os.listdir()
 
         while True:
             try:

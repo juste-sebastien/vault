@@ -1,4 +1,5 @@
 import os
+import json
 
 import crypt.decrypt as crypt
 
@@ -32,7 +33,7 @@ def consult(mode, vault):
     except KeyboardInterrupt:
         raise KeyboardInterrupt
 
-    if not "No url" in account.url:
+    if not account.url == "":
         return (
             f"Your login for {account.name} is {account.login}\n"
             + f"the password associated is {account.pwd}\n"
@@ -73,6 +74,9 @@ def get_account(file, vault, mode):
     if file in vault.content:
         with open(file, mode) as f:
             data = crypt.get_decrypt_data(vault, f)
+            if type(data) == str:
+                data = data.replace('"', "'")
+                data = json.loads(data)
             name = data["ciphertext"]["account"]
             login = data["ciphertext"]["login"]
             password = data["ciphertext"]["pwd"]
