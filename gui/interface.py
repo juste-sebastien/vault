@@ -69,11 +69,6 @@ class AppScreen(MDScreen):
         self.account_list = {}
         super(AppScreen, self).__init__(**kwargs)
 
-    card_url = StringProperty("test.com")
-    card_name = StringProperty("test")
-    card_login = StringProperty("test")
-    card_pwd = StringProperty("test")
-
     def add_digits_to_list(self, widget):
         if widget.active and widget.name == "digits":
             self.custom_list += func_gen.DIGIT
@@ -92,10 +87,6 @@ class AppScreen(MDScreen):
         self.pwd = func_gen.generate(widget.value, self.custom_list)
         return self.pwd
 
-    def save(self, **kwargs):
-        arch.save(self.manager.get_screen("login").vault)
-        self.manager.transition.direction = "right"
-        self.manager.current = "login"
 
     def generate_consult(self, *args):
         carousel = self.ids.carousel_card
@@ -167,6 +158,12 @@ class AppScreen(MDScreen):
         else:
             self.consult(account_widget)
 
+    def add(self, name_wdgt, login_wdgt, pwd_wdgt, url_wdgt):
+        account = Account(name_wdgt.text, login_wdgt.text, pwd_wdgt.text, url_wdgt.text)
+        label_text = func_add.add_interface(self.manager.get_screen("login").vault, account)
+        self.ids.label_inner_add.text = label_text
+        pass
+
 
 class AccountScreen(MDScreen):
     def __init__(self, **kwargs):
@@ -194,7 +191,6 @@ class AccountScreen(MDScreen):
             file=self.account.file, vault=self.manager.get_screen("login").vault
         )
         self.ids.consult_label.text = f"{self.account.name} was deleted from your Vault"
-        self.manager.get_screen("login").vault.content.remove(self.widget.text)
         Clock.schedule_once(partial(self.change_screen, self), 2)
 
     def refresh(self, *args):
@@ -233,6 +229,15 @@ class VaultApp(MDApp):
         sm.add_widget(AppScreen(name="app"))
         return sm
 
+    def on_stop(self):
+        self.save()
+
+    def save(self):
+        arch.save(sm.get_screen("login").vault)
+        sm.transition.direction = "right"
+        sm.current = "login"
+        sm.get_screen("login").clear()
+        
 
 def run():
     VaultApp().run()

@@ -153,22 +153,26 @@
                 cols: 1
                 padding: dp(20)
                 MDTextField:
+                    id: account_name_add_tf
                     hint_text: "Account Name"
                     require: True
                     size_hint: 1, None
                     height: dp(40)
                 MDTextField:
+                    id: login_add_tf
                     hint_text: "Login"
                     require: True
                     size_hint: 1, None
                     height: dp(40)
                 MDTextField:
+                    id: pwd_add_tf
                     hint_text: "Password"
                     require: True
                     password: True
                     size_hint: 1, None
                     height: dp(40)
                 MDTextField:
+                    id: url_add_tf
                     hint_text: "Url"
                     size_hint: 1, None
                     height: dp(40)
@@ -178,7 +182,11 @@
                     size_hint: 0.2, None
                     height: dp(40)
                     pos_hint: {"center_x": 0.5}
-
+                    on_press: root.add(account_name_add_tf, login_add_tf, pwd_add_tf, url_add_tf)
+                MDLabel:
+                    id: label_inner_add
+                    halign: "center"
+                    pos_hint: {"center_x": 0.5}
 
         MDBottomNavigationItem:
             name: 'generate'
@@ -267,7 +275,7 @@
             name: 'logout'
             text: 'Logout'
             icon: 'logout'
-            on_tab_press: root.save()
+            on_tab_press: app.save()
             id: logout_item
 
 
