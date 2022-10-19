@@ -1,0 +1,321 @@
+#:kivy 2.1.0
+
+<LoginScreen>:
+    name: "login"
+    radius: [25, 0, 0, 0]
+    BoxLayout:
+        orientation: "vertical"
+        padding: "10dp", 0, "10dp", "15dp"
+        spacing: "10dp"
+        Image:
+            source: "./img/logo.png"
+        Widget:
+        MDTextField:
+            id: login
+            mode: "line"
+            hint_text: "Username"
+            icon_right: "account"
+            color: 1, 0, 0, 1
+            size_hint: 0.8, None
+            multiline: False
+            write_tab: False
+            height: "30dp"
+            pos_hint: {"center_x": 0.5}
+            required: True
+            mode: "rectangle"
+        ClickableTextFieldRound:
+            id: pwd
+            size_hint: 0.8, None
+            multiline: False
+            height: "30dp"
+            pos_hint: {"center_x": 0.5, "top": 1}
+
+        Widget:
+        MDFillRoundFlatButton:
+            text: "Connect"
+            size_hint: 0.5, 0.5
+            on_press: root.on_click(login, pwd)
+            pos_hint: {"center_x": 0.5}
+        MDFillRoundFlatButton:
+            text: "Clear"
+            size_hint: 0.35, 0.5
+            on_press: root.clear()
+            pos_hint: {"center_x": 0.5}
+
+
+<AccountScreen>:
+    name: "account"
+    MDTopAppBar:
+        left_action_items: [["arrow-left", lambda x: root.change_screen(x, root), "Go back to your Vault"]]
+    MDBoxLayout:
+        GridLayout:
+            cols: 1
+            padding: dp(20)
+            spacing: dp(10)
+            MDTextField:
+                id: account_name_field
+                hint_text: "Account Name"
+                require: True
+                size_hint: 1, None
+                height: dp(40)
+            MDTextField:
+                id: login_field
+                hint_text: "Login"
+                require: True
+                size_hint: 1, None
+                height: dp(40)
+            ClickableTextFieldLine:
+                id: pwd_field
+                size_hint: 1, None
+                height: dp(40)
+            MDTextField:
+                id: url_field
+                hint_text: "URL"
+                size_hint: 1, None
+                height: dp(40)
+            MDFillRoundFlatIconButton:
+                text: "Delete from my Vault"
+                icon: "delete-outline"
+                size_hint: 0.2, None
+                height: dp(40)
+                pos_hint: {"center_x": 0.5}
+                on_press: root.remove()
+            MDFillRoundFlatIconButton:
+                text: "Modify in my Vault"
+                icon: "refresh"
+                size_hint: 0.2, None
+                height: dp(40)
+                pos_hint: {"center_x": 0.5}
+                on_press: root.refresh()
+            MDLabel:
+                id: consult_label
+                halign: "center"
+                pos_hint: {"center_x": 0.5}
+        
+
+
+<Logo@BoxLayout>:
+    size_hint: None, None
+    height: dp(40)
+    width: dp(40)
+
+    Image:
+        source: "./img/logo.png"
+        keep_ratio: True
+
+
+<AppScreen>:
+    on_enter: root.generate_consult()
+    MDBottomNavigation:
+        panel_color: "teal"
+        text_color_active: app.theme_cls.primary_light
+        text_color_normal: "#0d0d0d"
+        id: bottom_navbar
+
+        MDBottomNavigationItem:
+            name: 'consult'
+            text: 'Consult'
+            icon: 'archive-eye-outline'
+            GridLayout:
+                cols: 1
+                padding: dp(20)
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                id: research_box
+                BoxLayout:
+                    size_hint: 1, None
+                    height: root.height / 10
+                    MDIconButton:
+                        icon: "magnify"
+                        pos_hint: {"center_x": self.width / 3, "center_y": 0.5}
+                        on_press: root.search(research)
+                    MDTextField:
+                        id: research
+                        hint_text: "Research"
+                        helper_text: "Type the name of the account"
+                MDLabel:
+                    id: research_label
+                    size_hint: 1, None
+                    halign: "center"
+                    valign: "center"
+                    height: dp(20)
+                    font_size: sp(10)
+                Carousel:
+                    id: carousel_card
+                    size_hint: 1, 0.8
+                    pos_hint: {"center_x": 0.5}
+
+
+        MDBottomNavigationItem:
+            name: 'add'
+            text: 'Add'
+            icon: 'archive-edit-outline'
+            GridLayout:
+                cols: 1
+                padding: dp(20)
+                MDTextField:
+                    id: account_name_add_tf
+                    hint_text: "Account Name"
+                    require: True
+                    size_hint: 1, None
+                    height: dp(40)
+                MDTextField:
+                    id: login_add_tf
+                    hint_text: "Login"
+                    require: True
+                    size_hint: 1, None
+                    height: dp(40)
+                MDTextField:
+                    id: pwd_add_tf
+                    hint_text: "Password"
+                    require: True
+                    password: True
+                    size_hint: 1, None
+                    height: dp(40)
+                MDTextField:
+                    id: url_add_tf
+                    hint_text: "Url"
+                    size_hint: 1, None
+                    height: dp(40)
+                MDFillRoundFlatIconButton:
+                    text: "Add to my Vault"
+                    icon: 'archive-edit-outline'
+                    size_hint: 0.2, None
+                    height: dp(40)
+                    pos_hint: {"center_x": 0.5}
+                    on_press: root.add(account_name_add_tf, login_add_tf, pwd_add_tf, url_add_tf)
+                MDLabel:
+                    id: label_inner_add
+                    halign: "center"
+                    pos_hint: {"center_x": 0.5}
+
+        MDBottomNavigationItem:
+            name: 'generate'
+            text: 'Generate'
+            icon: 'shield-edit-outline'
+            GridLayout:
+                cols: 1
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint: 1, None
+                        height: dp(100)
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "Choose length:"
+                            
+                        MDSlider:
+                            id: pwd_length
+                            min: 8
+                            max: 32
+                            value: 12
+                            hint: True
+                    GridLayout:
+                        cols: 2
+                        row_force_default: True
+                        row_default_height: dp(40)
+                        padding: dp(20)
+                        spacing: dp(20)
+                        MDSwitch:
+                            name: "alphabet"
+                            size_hint: None, 1/3
+                            color: 0.29, 0.64, 0.95, 1
+                            width: dp(40)
+                            active: True
+                            disabled: True
+                            disabled_color: "Teal"
+                            icon_active: "check"
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "include letters from a to z"
+                        MDSwitch:
+                            name: "digits"
+                            size_hint: None, 1/3
+                            color: 0.29, 0.64, 0.95, 1
+                            width: dp(40)
+                            active: False
+                            on_active: root.add_digits_to_list(self)
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "include digits from 0 to 9"
+                        MDSwitch:
+                            name: "spec_char"
+                            size_hint: None, 1/3
+                            color: 0.29, 0.64, 0.95, 1
+                            width: dp(40)
+                            active: False
+                            on_active: root.add_spec_to_list(self)
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: "include !#$%&*+-./:;<=>?@\."
+                    BoxLayout:
+                        orientation: "vertical"
+                        spacing: dp(5)
+                        MDFillRoundFlatIconButton:
+                            id: generate_button
+                            text: "Generate"
+                            icon: 'shield-edit-outline'
+                            on_press: root.do_generate(pwd_length)
+                            size_hint: 0.5, 0.3
+                            pos_hint: {"center_x": 0.5}
+                        MDLabel:
+                            bold: True
+                            color: 0, 0.5, 0.5, 1
+                            text: root.pwd
+                            halign: "center"
+                            font_size: sp(20)
+
+
+        MDBottomNavigationItem:
+            name: 'logout'
+            text: 'Logout'
+            icon: 'logout'
+            on_tab_press: app.save()
+            id: logout_item
+
+
+<ClickableTextFieldRound>:
+    size_hint_y: None
+    height: pwd_text_field.height
+
+    MDTextField:
+        id: pwd_text_field
+        hint_text: root.hint_text
+        text: root.text
+        password: True
+        required: True
+        mode: "rectangle"
+
+    MDIconButton:
+        icon: "eye-off"
+        pos_hint: {"center_y": .5}
+        pos: pwd_text_field.width - self.width + dp(8), 0
+        theme_text_color: "Hint"
+        on_release:
+            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+            pwd_text_field.password = False if pwd_text_field.password is True else True
+
+<ClickableTextFieldLine>:
+    size_hint_y: None
+    height: account_pwd_field.height
+
+    MDTextField:
+        id: account_pwd_field
+        hint_text: root.hint_text
+        text: root.text
+        password: True
+        required: True
+
+    MDIconButton:
+        icon: "eye-off"
+        pos_hint: {"center_y": .5}
+        pos: account_pwd_field.width - self.width + dp(8), 0
+        theme_text_color: "Hint"
+        on_release:
+            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+            account_pwd_field.password = False if account_pwd_field.password is True else True

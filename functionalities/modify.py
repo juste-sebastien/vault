@@ -1,7 +1,6 @@
 import getpass
+import os
 
-import vault.vault as vlt
-import vault.account as account
 import functionalities.add as funct_add
 
 import functionalities.consult as funct_consult
@@ -19,17 +18,22 @@ def do_modifying(vault):
     parameter = get_parameter()
 
     if change_set(account, parameter):
-        text = {
-            "account": account.name,
-            "login": account.login,
-            "pwd": account.pwd,
-            "url": account.url,
-        }
-        row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
-        account.setting = row
-        return funct_add.save_file(account, vault, "w", "modified")
+        return do_modifying_interface(vault, account)
     else:
         return "Sorry, we can't modifying your account"
+
+
+def do_modifying_interface(vault, account):
+    text = {
+        "account": account.name,
+        "login": account.login,
+        "pwd": account.pwd,
+        "url": account.url,
+    }
+    row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
+    account.setting = row
+    os.remove(account.file)
+    return funct_add.save_file(account, vault, "w", "modified")
 
 
 def get_parameter():

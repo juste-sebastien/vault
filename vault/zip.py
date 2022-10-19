@@ -22,7 +22,8 @@ def undo_zip(vault):
         name of temporary directory
 
     """
-    vault.temp = f"{vault.parent}/{vault.login}/"
+    os.chdir(vault.parent)
+    vault.temp = f"{vault.parent}/{vault.login}_vault/"
     try:
         os.mkdir(vault.temp)
     except FileExistsError:
@@ -33,6 +34,7 @@ def undo_zip(vault):
         pyminizip.uncompress(vault.path, vault.password, vault.temp, 1)
     except OSError:
         pass
+    vault.content = os.listdir()
 
 
 def do_zip(vault):

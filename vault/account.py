@@ -14,6 +14,7 @@ class Account:
         self.url = url
         self.file = f"{self.name}.csv"
         self.setting = {}
+        self.widget = ""
 
     @property
     def name(self):
@@ -46,7 +47,7 @@ class Account:
     @url.setter
     def url(self, url):
         if not url:
-            self._url = "No registered URL"
+            self._url = ""
         else:
             formated_url = consult.formate_url(url)
             self._url = formated_url
@@ -69,7 +70,7 @@ class Account:
             if url == "":
                 raise TypeError
         except TypeError:
-            url = "No url registered"
+            url = ""
         finally:
             return Account(name, login, password, url)
 

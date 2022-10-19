@@ -34,11 +34,22 @@ Please read [requirements.txt](https://github.com/juste-sebastien/vault/blob/mas
 ```bash
 git clone https://github.com/juste-sebastien/vault
 cd path/to/the/file
+```
+
+For running the app in a console
+```bash
 python3 main.py
 ```
 
+For running the app with an interface
+```bash
+python3 main.py i
+or python3 main.py interface
+```
 
-##### Functions
+
+
+#### Functions
 ***
 
 **get_welcome():**
@@ -228,8 +239,8 @@ python3 main.py
 
 #### Features
 ***
-- [X] Crypted entire file
-- [ ] Add a GUI
+- [X] Crypted entire file :lock:
+- [ ] Add a GUI - Work in progress :hammer_and_wrench:
 - [ ] Add a DB to keep vault on a server
 - [ ] Create a mozila applet
 
