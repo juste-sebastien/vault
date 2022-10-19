@@ -26,6 +26,10 @@ def add(vault):
 
     """
     account = vlt_acnt.Account.get()
+    return add_interface(vault, account)
+
+
+def add_interface(vault, account):
     text = {
         "account": account.name,
         "login": account.login,
@@ -34,8 +38,8 @@ def add(vault):
     }
     row = {"nonce": "", "header": "", "ciphertext": text, "tag": ""}
     account.setting = row
-    save_file(account, vault, "w", "added")
-    return account
+    
+    return save_file(account, vault, "w", "added")
 
 
 def not_existing(vault):
