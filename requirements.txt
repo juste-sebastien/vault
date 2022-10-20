@@ -3,3 +3,4 @@ Libraries used:
     - getpass
     - pycryptodome == 3.15.0
     - kivy == 2.1.0
+    - kivymd == 1.1.1

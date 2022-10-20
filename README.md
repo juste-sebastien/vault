@@ -3,6 +3,10 @@
 Copyright 2022 Sébastien Juste
 
 
+## Warnings
+Please don't use this for a real application. This programm is just a end-study project and contains major vulnerabilites
+
+
 ## Table of Contents
 1. [Video Demo](#video-demo)
 2. [Description](#description)
@@ -13,7 +17,7 @@ Copyright 2022 Sébastien Juste
 7. [Contributing](#contributing)
 
 
-#### Video Demo: [click here](https://youtu.be/gkvQTWA7YEw)
+#### Video Demo: [click here for the interface video](https://youtu.be/-0QkAYhK-Lk) and [here for the terminal version video](https://youtu.be/uoL-wyLS1fU)
 ***
 
 
@@ -240,9 +244,8 @@ or python3 main.py interface
 #### Features
 ***
 - [X] Crypted entire file :lock:
-- [ ] Add a GUI - Work in progress :hammer_and_wrench:
-- [ ] Add a DB to keep vault on a server
-- [ ] Create a mozila applet
+- [X] Add a GUI :lock:
+
 
 
 #### Contributing
