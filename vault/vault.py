@@ -13,45 +13,19 @@ class Vault:
         self.content = ""
         self.accounts_widgets = {}
 
-    @property
-    def login(self):
-        return self._login
-
-    @login.setter
-    def login(self, login):
-        self._login = login
-
-    @property
-    def password(self):
-        return self._password
-
-    @password.setter
-    def password(self, password):
-        self._password = password
-
-    @property
-    def temp(self):
-        return self._temp
-
-    @temp.setter
-    def temp(self, temp_dir):
-        self._temp = temp_dir
-
-    @property
-    def content(self):
-        return self._content
-
-    @content.setter
-    def content(self, list_file):
-        self._content = list_file
-
     @classmethod
     def get(cls):
+        """
+        Prompt user to create a vault
+
+        Parameters:
+        -----------------
+
+        Returns:
+        -----------------
+        Vault: Vault object
+        """
         login = input("Login: ").lower().strip()
         password = getpass.getpass()
         return Vault(login, password)
 
-    def findfile(self, name, path):
-        for dirpath, dirname, filename in os.walk(path):
-            if name in filename:
-                return f"{dirpath}/"

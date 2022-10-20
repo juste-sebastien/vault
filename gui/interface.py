@@ -35,6 +35,18 @@ Window.size = (400, 700)
 
 class LoginScreen(MDScreen):
     def on_click(self, login, pwd):
+        """
+        Add the DIGITS list to the custom_list for creating a password
+
+        Parameters:
+        -----------------
+        login: MDTextField
+        pwd: ClickableTextFieldRound object
+
+        Returns:
+        -----------------
+
+        """
         self.vault = vlt.Vault(login.text, pwd.ids.pwd_text_field.text)
         if self.vault.login != "" and self.vault.password != "":
             arch.undo_zip(self.vault)
@@ -47,16 +59,36 @@ class LoginScreen(MDScreen):
             self.ids.pwd.ids.pwd_text_field.helper_text = "Password is required"
 
     def clear(self):
+        """
+        Clear MDTextField
+
+        Parameters:
+        -----------------
+
+
+        Returns:
+        -----------------
+
+        """
+        
         self.ids.login.text = ""
         self.ids.pwd.text = ""
 
 
 class ClickableTextFieldRound(MDRelativeLayout):
+    """
+    text field composed with a MDTextField an MDIconButton
+    to reveal the password
+    """
     text = StringProperty()
     hint_text = StringProperty("Password")
 
 
 class ClickableTextFieldLine(MDRelativeLayout):
+    """
+    text field composed with a MDTextField an MDIconButton
+    to reveal the password
+    """
     text = StringProperty()
     hint_text = StringProperty("Password")
 
@@ -70,12 +102,34 @@ class AppScreen(MDScreen):
         super(AppScreen, self).__init__(**kwargs)
 
     def add_digits_to_list(self, widget):
+        """
+        Add the DIGITS list to the custom_list for creating a password
+
+        Parameters:
+        -----------------
+        widget: MDSwitch
+
+        Returns:
+        -----------------
+
+        """
         if widget.active and widget.name == "digits":
             self.custom_list += func_gen.DIGIT
         else:
             self.custom_list = [x for x in self.custom_list if x not in func_gen.DIGIT]
 
     def add_spec_to_list(self, widget):
+        """
+        Add the SPEC_CHARS list to the custom_list for creating a password
+
+        Parameters:
+        -----------------
+        widget: MDSwitch
+
+        Returns:
+        -----------------
+
+        """
         if widget.active and widget.name == "spec_char":
             self.custom_list += func_gen.SPEC_CHARS
         else:
@@ -84,11 +138,34 @@ class AppScreen(MDScreen):
             ]
 
     def do_generate(self, widget):
+        """
+        Generate a password with generate() in ./functionalities/generate.py
+
+        Parameters:
+        -----------------
+        widget: MDSlider
+
+        Returns:
+        -----------------
+        pwd: str
+        """
         self.pwd = func_gen.generate(widget.value, self.custom_list)
         return self.pwd
 
 
     def generate_consult(self, *args):
+        """
+        Create a GridLayout of 2 x 2 MDRaisedButton each representing an account
+        and add each grid in the Carousel
+
+        Parameters:
+        -----------------
+        vault: Vault object from class_vault.py
+
+        Returns:
+        -----------------
+
+        """
         carousel = self.ids.carousel_card
         carousel.clear_widgets()
         temp_list = self.manager.get_screen("login").vault.content
@@ -122,6 +199,18 @@ class AppScreen(MDScreen):
             carousel.add_widget(grid)
 
     def generate_card(self, account: Account):
+        """
+        Create a button with the name of the account
+
+        Parameters:
+        -----------------
+        account: Account
+
+        Returns:
+        -----------------
+        button: MDRaisedButton
+            representing an account
+        """
         button = MDRaisedButton(
             text=account.name, size_hint=(self.width / 3 - dp(10), dp(60))
         )
@@ -129,6 +218,19 @@ class AppScreen(MDScreen):
         return button
 
     def consult(self, *args):
+        """
+        Search if the text of the button exist in vault.content,
+        if it's ok, generate an AccountScreen, add it to the ScreenManager,
+        and change to the AccountScreen
+
+        Parameters:
+        -----------------
+        args: list
+
+        Returns:
+        -----------------
+
+        """
         for key, value in self.manager.get_screen(
             "login"
         ).vault.accounts_widgets.items():
@@ -143,6 +245,17 @@ class AppScreen(MDScreen):
         sm.current = "account"
 
     def search(self, widget):
+        """
+        Search if an account exist in vault.content
+
+        Parameters:
+        -----------------
+        widget: MDTextField
+
+        Returns:
+        -----------------
+
+        """
         found = False
         for key in self.manager.get_screen("login").vault.accounts_widgets.keys():
             if widget.text == key:
@@ -159,6 +272,20 @@ class AppScreen(MDScreen):
             self.consult(account_widget)
 
     def add(self, name_wdgt, login_wdgt, pwd_wdgt, url_wdgt):
+        """
+        Adding an account in vault 
+
+        Parameters:
+        -----------------
+        name_wdgt: MDTextField
+        login_wdgt: MDTextField
+        pwd_wdgt: MDTextField
+        url_wdgt: MDTextField
+
+        Returns:
+        -----------------
+
+        """
         account = Account(name_wdgt.text, login_wdgt.text, pwd_wdgt.text, url_wdgt.text)
         label_text = func_add.add_interface(self.manager.get_screen("login").vault, account)
         self.ids.label_inner_add.text = label_text
@@ -170,16 +297,48 @@ class AccountScreen(MDScreen):
         super(AccountScreen, self).__init__(**kwargs)
 
     def define_account(self, account: Account, widget):
+        """
+        Get the account and the corresponding button in AppScreen
+
+        Parameters:
+        -----------------
+        account: Account object
+        widget: MDButton
+
+        Returns:
+        -----------------
+
+        """
         self.account = account
         self.widget = widget
 
     def on_enter(self, *args):
+        """
+        Insert account's settings in the corresponding TextField
+
+        Parameters:
+        -----------------
+
+        Returns:
+        -----------------
+
+        """
         self.ids.account_name_field.text = self.account.name
         self.ids.login_field.text = self.account.login
         self.ids.url_field.text = self.account.url
         self.ids.pwd_field.children[1].text = self.account.pwd
 
     def remove(self, *args):
+        """
+        Delete an account in a vault 
+
+        Parameters:
+        -----------------
+
+        Returns:
+        -----------------
+
+        """
         if self.widget.text in self.manager.get_screen("login").vault.accounts_widgets:
             del self.manager.get_screen("login").vault.accounts_widgets[
                 self.widget.text
@@ -194,6 +353,16 @@ class AccountScreen(MDScreen):
         Clock.schedule_once(partial(self.change_screen, self), 2)
 
     def refresh(self, *args):
+        """
+        Change parameters of the account when the user want to modify them
+
+        Parameters:
+        -----------------
+
+        Returns:
+        -----------------
+
+        """
         self.account.name = self.ids.account_name_field.text
         self.account.login = self.ids.login_field.text
         self.account.pwd = self.ids.pwd_field.children[1].text
@@ -205,9 +374,20 @@ class AccountScreen(MDScreen):
         self.ids.consult_label.text = func_modify.do_modifying_interface(
             self.manager.get_screen("login").vault, self.account
         )
-        # self.ids.consult_label.text = f"{self.account.name} was modified in your Vault"
 
     def change_screen(self, *args):
+        """
+        Change the screen in the MDApp
+
+        Parameters:
+        -----------------
+        args: list of arguments
+            args allow to search if a screen is in ScreenManager
+
+        Returns:
+        -----------------
+
+        """
         self.ids.consult_label.text = ""
         for i in range(len(args)):
             if args[i] in sm.screens:
@@ -222,6 +402,17 @@ sm = ScreenManager()
 
 class VaultApp(MDApp):
     def build(self):
+        """
+        Create the MDApp with title and themes.
+        Adding some Screens to ScreenManager sm
+
+        Parameters:
+        -----------------
+
+        Returns:
+        -----------------
+
+        """
         self.title = "[Vault App] by Cabron"
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Teal"
@@ -230,9 +421,30 @@ class VaultApp(MDApp):
         return sm
 
     def on_stop(self):
+        """
+        When the user close the window, execute save()
+
+        Parameters:
+        -----------------
+
+        Returns:
+        -----------------
+        
+        """
         self.save()
 
     def save(self):
+        """
+        Execute the save() function in /vault/zip.py and change the screen to LoginScreen
+        if the user have clicked on logout tab
+
+        Parameters:
+        -----------------
+
+        Returns:
+        -----------------
+
+        """
         arch.save(sm.get_screen("login").vault)
         sm.transition.direction = "right"
         sm.current = "login"

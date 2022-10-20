@@ -10,19 +10,15 @@ import crypt.encrypt as encrypt
 
 def add(vault):
     """
-    Add a new account on the csv file representing the vault
+    Create a new account on the csv file representing the vault
 
     Parameters:
     -----------------
-    file: str
-        A "file" str is returned by calling vault.file
-    mode: str
-        "mode" to give the parameter of open() a for append to the current vault
+    vault: Vault object
 
     Returns:
     -----------------
-    f-string: str
-        f-string from save_file()
+    add_interface(): function
 
     """
     account = vlt_acnt.Account.get()
@@ -30,6 +26,19 @@ def add(vault):
 
 
 def add_interface(vault, account):
+    """
+    Second part of add() to match with the interface and create an account
+
+    Parameters:
+    -----------------
+    account: Account object
+    vault: Vault object
+
+    Returns:
+    -----------------
+    save_file(): function
+
+    """
     text = {
         "account": account.name,
         "login": account.login,
@@ -43,6 +52,23 @@ def add_interface(vault, account):
 
 
 def not_existing(vault):
+    """
+    Prompt user to know if he want to add the account that not existing
+
+    Parameters:
+    -----------------
+    vault: Vault Object
+
+    Returns:
+    -----------------
+    add(): function
+
+    Exceptions:
+    -----------------
+    KeyboardInterrupt: 
+        to stop the program
+
+    """
     print("Account seems not to be save in your Vault.")
     want_add = input("Do you want to add it in your Vault? (yes or no) ")
     if "yes" in want_add:
@@ -52,6 +78,22 @@ def not_existing(vault):
 
 
 def save_file(account, vault, mode, operation):
+    """
+    open the corresponding file, crypt the content and add it to vault.content
+
+    Parameters:
+    -----------------
+    account: Account object
+    vault: Vault object
+    mode: str
+        corresponding to the open() mode
+    operation: str
+
+    Returns:
+    -----------------
+    f-string: str
+
+    """
     acnt_filepath = vault.temp + account.file
     with open(acnt_filepath, mode) as file:
         ciphertext = encrypt.encrypt(vault, account.setting)

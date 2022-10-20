@@ -7,6 +7,20 @@ import functionalities.consult as funct_consult
 
 
 def do_modifying(vault):
+    """
+    Prompt user for the account to change, and the parameter
+
+    Parameters:
+    -----------------
+    vault: Vault Object
+
+    Returns:
+    -----------------
+    do_modifying_interface(): function
+    or
+    str
+
+    """
     prompt = "Which account do you want modify? "
     try:
         account = funct_consult.search("r", vault, prompt)
@@ -24,6 +38,21 @@ def do_modifying(vault):
 
 
 def do_modifying_interface(vault, account):
+    """
+    Get the account settings, put them in a dict, update account.setting dict,
+    remove the corresponding file and save it by calling save_file()
+    in ./functionalities/add.py
+
+    Parameters:
+    -----------------
+    account: Account object
+    vault: Vault object
+
+    Returns:
+    -----------------
+    save_file(): function in ./functionalities/add.py
+
+    """
     text = {
         "account": account.name,
         "login": account.login,
@@ -37,6 +66,18 @@ def do_modifying_interface(vault, account):
 
 
 def get_parameter():
+    """
+    Prompts user to get the parameter of the account to change
+    Parameters:
+    -----------------
+
+    Returns:
+    -----------------
+    parameter: str
+    or
+    get_parameter()
+
+    """
     try:
         parameter = str(input("Which parameter do you want to change? "))
     except:
@@ -51,6 +92,20 @@ def get_parameter():
 
 
 def change_set(account, parameter):
+    """
+    Boolean function that check the parameter of the account to change, 
+    prompt user for the new one and update the account setting
+
+    Parameters:
+    -----------------
+    account: Account object
+    parameter: str
+
+    Returns:
+    -----------------
+    True or False
+
+    """
     if parameter in ["name", "n"]:
         account.name = str(input("New account name: "))
         return True

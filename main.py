@@ -126,6 +126,19 @@ def get_choice():
 
 
 def do_function(choice, vault):
+    """
+    Execute the function relative to the user's choice
+
+    Parameters:
+    -----------------
+    vault: Vault object from class_vault.py
+    choice: str
+        comes from get_choice()
+
+    Returns:
+    -----------------
+    the function corresponding to the choice
+    """
     match choice:
         case "consult":
             print(f"\nGroovy we're gonna to consult your vault")

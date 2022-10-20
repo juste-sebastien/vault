@@ -34,7 +34,10 @@ def generate(pwd_length=0, char_list=[]):
 
     Parameters:
     -----------------
-
+    pwd_length: int
+        set by default to zero to match with the interface
+    char_list: list
+        set by default to an empty list to match with the interface
 
     Returns:
     -----------------
@@ -57,6 +60,17 @@ def generate(pwd_length=0, char_list=[]):
 
 
 def choose_pwd_length():
+    """
+    Prompt user for the length of the password that he want
+
+    Parameters:
+    -----------------
+
+    Returns:
+    -----------------
+    pwd_length: int
+
+    """
     try:
         pwd_length = int(input("Which length do you want for your Password? "))
     except (ValueError, TypeError):
@@ -67,6 +81,19 @@ def choose_pwd_length():
 
 
 def choose_special_chars():
+    """
+    Prompt user for the type of characters that he want in the password
+    and add it to char_list
+
+    Parameters:
+    -----------------
+
+
+    Returns:
+    -----------------
+    char_list: list
+
+    """
     prompt = (
         "What type of characters do you want?\n"
         + "a for alphabet\n"

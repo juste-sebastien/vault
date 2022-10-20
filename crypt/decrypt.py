@@ -8,6 +8,19 @@ from crypt.encrypt import generate_key
 
 
 def decrypt(vault, ciphertext):
+    """
+    Decrypt the data of the csv file
+
+    Parameters:
+    -----------------
+    vault: Vault object
+    ciphertext: str
+
+    Returns:
+    -----------------
+    plaintext: dict
+
+    """
     try:
         b64 = json.loads(ciphertext)
         jk = ["nonce", "header", "ciphertext", "tag"]
@@ -23,6 +36,20 @@ def decrypt(vault, ciphertext):
 
 
 def get_decrypt_data(vault, file):
+    """
+    Read the content of the file, change it to a dict, call decrypt()
+
+    Parameters:
+    -----------------
+    vault: Vault object
+    file: str
+        format [name].csv
+
+    Returns:
+    -----------------
+    str
+
+    """
     file_content = file.read()
     nonce, header, ciphertext, tag = file_content.split(",")
     content = {"nonce": nonce, "header": header, "ciphertext": ciphertext, "tag": tag}

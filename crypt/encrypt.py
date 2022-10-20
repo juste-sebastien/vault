@@ -9,6 +9,19 @@ from Crypto.Random import get_random_bytes
 
 
 def encrypt(vault, plaintext):
+    """
+    Encrypt the content of the csv file
+
+    Parameters:
+    -----------------
+    vault: Vault object
+    plaintext: str
+
+    Returns:
+    -----------------
+    result: dict
+
+    """
     key = generate_key(vault.password)
 
     header = bytes(vault.login.encode("utf-8"))
@@ -26,6 +39,19 @@ def encrypt(vault, plaintext):
 
 
 def generate_key(password):
+    """
+    Generate a 32bits length key with the user password
+
+    Parameters:
+    -----------------
+    password: str
+
+    Returns:
+    -----------------
+    key: bytes
+
+
+    """
     key = password
 
     while len(key) < 32:

@@ -48,15 +48,14 @@ def search(mode, vault, prompt):
 
     Parameters:
     -----------------
-    file: str
-        A "file" str is returned by calling vault.file
+    vault: Vault object
+    prompt: str
     mode: str
         "mode" to give the parameter of open() r for reading and w for writing
 
     Returns:
     -----------------
-    data[""]: tuple
-        only if a corresponding data was found
+    get_account(): function
     """
     try:
         research = input(prompt).lower().strip()
@@ -71,6 +70,26 @@ def search(mode, vault, prompt):
 
 
 def get_account(file, vault, mode):
+    """
+    Search if a file exist in vault.content, decrypt content to read it
+
+    Parameters:
+    -----------------
+    file: str
+        format [name].csv
+    vault: Vault object
+    mode: str
+        the mode to open the file
+
+    Returns:
+    -----------------
+    account: Account object
+
+    Exceptions:
+    -----------------
+    EOFError: if the file was not find
+
+    """
     if file in vault.content:
         with open(file, mode) as f:
             data = crypt.get_decrypt_data(vault, f)
