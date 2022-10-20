@@ -29,3 +29,23 @@ class Vault:
         password = getpass.getpass()
         return Vault(login, password)
 
+
+    def findfile(self, name, path):
+        """
+        Search a specific file in all the os 
+
+        Parameters:
+        -----------------
+        name: str
+            representing a file name
+        path: str
+            path of the file
+
+        Returns:
+        -----------------
+        f-string: str
+            complete path of file
+        """
+        for dirpath, dirname, filename in os.walk(path):
+            if name in filename:
+                return f"{dirpath}/"
